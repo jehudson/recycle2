@@ -1,0 +1,46 @@
+extends layout
+
+block content
+	.container
+		.form-style-5
+			form(action='/signup', method='POST')
+				fieldset
+					legend
+						span.number 1
+						|  Please fill in this form  to register
+					input(type='text', name='fullname', placeholder='Your Name *', required)
+					input(type='text', name='username', placeholder='Username *', required)
+					input(type='email', name='email', placeholder='Your Email *', required)
+					input(type='password', name='password', placeholder='Password', required)
+					select(name='location')
+						option(value='Please select your street/apartment') Please select your street/apartment
+						option(value='Burwood Court') Burwood Court
+						option(value='Barr Beacon') Barr Beacon
+						option(value='Baxter House') Baxter House
+						option(value='Ashton Heights') Ashton Heights
+						option(value='High View Court') High View Court
+						option(value='Moonlight Walk') Moonlight Walk
+						option(value='Harlech Court') Harlech Court
+						option(value='Amroth Close') Amroth Close
+						option(value='Canonbie Road') Canonbie Road
+						option(value='Cleeve Hill') Cleeve Hill
+						option(value='Honor Oak Road') Honor Oak Road
+						option(value='Horniman Drive') Horniman Drive
+						option(value='Langton Rise') Langton Rise
+						option(value='Liphook Crescent') Liphook Crescent
+						option(value='Netherby Road') Netherby Road
+						option(value='Ringmore Rise') Ringmore Rise
+						option(value='Rocombe Crescent') Rocombe Crescent
+						option(value='Sydmons Court') Sydmons Court
+						option(value='Tewkesbury Avenue') Tewkesbury Avenue
+						option(value='The Hermitage') The Hermitage
+						option(value='Westwood Park') Westwood Park
+
+				input(type='submit', value='Register')
+				p
+					a.button-blue(href='https://tewkesburylodge.org.uk/privacy-policy/' target='_blank') Privacy Policy
+					
+				span.clearfix
+		#message
+			if message
+				h1.text-center.error-message #{message}

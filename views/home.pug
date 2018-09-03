@@ -1,0 +1,27 @@
+
+extends layout
+
+block content
+
+  .container
+    .tab
+      button#defaultOpen.tablinks(onclick="openPosts(event, 'myposts')") My Posts
+      button.tablinks(onclick="openPosts(event, 'mydetails')") My Details
+      button.tablinks(onclick="openPosts(event, 'recyclehelp')") ReCycle Help
+
+    #myposts.tabcontent
+      a.button-green(href='#')
+        span.glyphicon.glyphicon-pencil
+        | Make a New Post
+      a.button-green(href='#')
+        span.glyphicon.glyphicon-th-list
+        | View Your Recent Posts
+      a.button-blue(href='/signout')
+        span.glyphicon.glyphicon-log-out
+        | Log Out
+    #mydetails.tabcontent
+      p my details
+    #recyclehelp.tabcontent
+      p help section
+block scripts
+  script(src='/javascripts/tabs.js')
