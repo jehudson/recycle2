@@ -10,15 +10,19 @@ block content
       button.tablinks(onclick="openPosts(event, 'recyclehelp')") ReCycle Help
 
     #myposts.tabcontent
-      a.button-green(href='#')
+      newpost-button.button-green
         span.glyphicon.glyphicon-pencil
         | Make a New Post
-      a.button-green(href='#')
+      recentpost-button.button-green
         span.glyphicon.glyphicon-th-list
         | View Your Recent Posts
       a.button-blue(href='/signout')
         span.glyphicon.glyphicon-log-out
         | Log Out
+      #newPost
+        | New Posty
+      #recentPost
+        | recent Post
     #mydetails.tabcontent
       p my details
     #recyclehelp.tabcontent

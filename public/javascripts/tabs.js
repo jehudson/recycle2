@@ -14,3 +14,15 @@ function openPosts(evt, cityName) {
 
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
+
+$(document).ready(function(){
+    $("newpost-button").click(function(){
+        $("#newPost").toggle();
+    });
+});
+
+$(document).ready(function(){
+    $("recentpost-button").click(function(){
+        $("#recentPost").toggle();
+    });
+});
