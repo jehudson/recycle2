@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var Advert = require('../models/adverts');
+var bCrypt = require('bcrypt-nodejs')
+
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
 	// Passport adds this method to request object. A middleware is allowed to add properties to
@@ -26,8 +29,24 @@ module.exports = function(passport){
 		failureFlash : true
 	}));
 
+	router.post('/adverts', isAuthenticated, function(req, res){
+
+   var newAdvert = new Advert(req.body);
+	 newAdvert.username =req.session.user;
+	 newAdvert.location =req.session.location;
+
+   newAdvert.save()
+	 	.then(item =>{
+		 	res.send("Information saved to database");
+
+	 	})
+	 	.catch(err =>{
+		 	res.status(400).send("Unable to save to database");
+	 	});
+	});
+
 	/* GET Registration Page */
-	router.get('/signup', function(req, res){
+	router.get('/signup', function(req, res) {
 		res.render('register',{message: req.flash('message')});
 	});
 
@@ -48,6 +67,8 @@ module.exports = function(passport){
 		req.logout();
 		res.redirect('/');
 	});
+
+
 
 	return router;
 }

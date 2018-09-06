@@ -20,9 +20,33 @@ block content
         span.glyphicon.glyphicon-log-out
         | Log Out
       #newPost
-        | New Posty
+        .form-style-5
+          form(action='/adverts', method='POST')
+            fieldset
+              legend
+                span.number 1
+                |  Make a New Post
+              select#dropDown-message-type(name='messagetype')
+                option What type of post is this?
+                option(value='offer') It's an offer of an item
+                option(value='wanted') It's a request for a WANTED item
+              input(type='text', name='shortdescription', placeholder='Short description', required, autofocus)
+              textarea(name='longdescription', placeholder='You can add more details here', required)
+              #div1.drop-down-show-hide div 1
+              #div2.drop-down-show-hide div 2
+            input(type='submit', value='Make the Post')
+            #offer.drop-down-show-hide
+              image-button.button-green
+                span.glyphicon.glyphicon-pencil
+                | Choose a file
+              p If you have a picture of the item, you can upload it.
+              p If you have javascript enabled and a modern browser, choose any size image and it will be re-sized automatically before upload. Otherwise, maximum file size is 1.2MB.
+
+            span.clearfix
+
       #recentPost
         | recent Post
+
     #mydetails.tabcontent
       p my details
     #recyclehelp.tabcontent

@@ -26,3 +26,13 @@ $(document).ready(function(){
         $("#recentPost").toggle();
     });
 });
+
+$('.drop-down-show-hide').hide();
+
+
+
+$('#dropDown-message-type').change(function () {
+    $('.drop-down-show-hide').hide()
+    $('#' + this.value).show();
+
+});
