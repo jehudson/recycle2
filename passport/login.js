@@ -27,7 +27,11 @@ module.exports = function(passport){
                     // User and password both match, return user from done method
                     // which will be treated like success
 										req.session.user = username;
-										req.session.location = "Tewkesbury Avenue";
+										var address = user.location;
+										req.session.address = address;
+										var email = user.email;
+										req.session.email = email;
+
                     return done(null, user);
                 }
             );

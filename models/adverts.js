@@ -4,6 +4,7 @@ module.exports = mongoose.model('posts',{
   id: String,
   username: String,
   location: String,
+  email: String,
   messagetype: String,
   shortdescription: String,
   longdescription: String

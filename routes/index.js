@@ -2,7 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 var Advert = require('../models/adverts');
-var bCrypt = require('bcrypt-nodejs')
+var bCrypt = require('bcrypt-nodejs');
+var User = require('../models/user');
+
+
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
@@ -33,7 +36,12 @@ module.exports = function(passport){
 
    var newAdvert = new Advert(req.body);
 	 newAdvert.username =req.session.user;
-	 newAdvert.location =req.session.location;
+
+
+
+ console.log('monty', req.session.address);
+ 	newAdvert.location = req.session.address;
+	newAdvert.email = req.session.email;
 
    newAdvert.save()
 	 	.then(item =>{
