@@ -51,5 +51,16 @@ block content
       p my details
     #recyclehelp.tabcontent
       p help section
+
+
+    if (locals.message)
+      .alert.alert-success(role='alert')
+        strong Welcome!
+        |  Please make a selection
+    if (locals.post)
+      .alert.alert-success(role='alert')
+        strong Thank you!
+        |  You have posted successfully
+
 block scripts
   script(src='/javascripts/tabs.js')

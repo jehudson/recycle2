@@ -13,7 +13,6 @@ module.exports = function(passport){
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
             var address  = user.location;
-            console.log('this is the location', address );
             console.log('deserializing user:',user);
 
             done(err, user, address);

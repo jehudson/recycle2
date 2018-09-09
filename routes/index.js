@@ -45,7 +45,8 @@ module.exports = function(passport){
 
    newAdvert.save()
 	 	.then(item =>{
-		 	res.send("Information saved to database");
+			res.locals.post = req.flash();
+		 	res.render('home');
 
 	 	})
 	 	.catch(err =>{
@@ -67,6 +68,9 @@ module.exports = function(passport){
 
 	/* GET Home Page */
 	router.get('/home', isAuthenticated, function(req, res){
+//		req.flash('success', 'Registration successfully');
+		res.locals.message = req.flash();
+
 		res.render('home', { user: req.user });
 	});
 
