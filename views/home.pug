@@ -5,23 +5,28 @@ block content
 
   .container
     .tab
-      button#defaultOpen.tablinks(onclick="openPosts(event, 'myposts')") My Posts
-      button.tablinks(onclick="openPosts(event, 'mydetails')") My Details
-      button.tablinks(onclick="openPosts(event, 'recyclehelp')") ReCycle Help
+      button#defaultOpen.tablinks(onclick="openPosts(event, 'home')") Home
+      button.tablinks(onclick="openPosts(event, 'brwseitems')") Browse Items
+      button.tablinks(onclick="openPosts(event, 'offeritem')") Offer an Item
+      button.tablinks(onclick="openPosts(event, 'requestitem')") Request an Item
+      button.tablinks(onclick="openPosts(event, 'myrecycle')") My Recycling
+      button.tablinks(onclick="openPosts(event, 'mysettings')") My Settings
+      button.tablinks(onclick="openPosts(event, 'announcements')") Announcements
+
 
     #myposts.tabcontent
       newpost-button.button-green
         span.glyphicon.glyphicon-pencil
-        | Make a New Post
+        | Browse Items
       recentpost-button.button-green
         span.glyphicon.glyphicon-th-list
-        | View Your Recent Posts
+        | Offer an Item
       a.button-blue(href='/signout')
         span.glyphicon.glyphicon-log-out
         | Log Out
       #newPost
         .form-style-5
-          form(action='/adverts', method='POST')
+          form(action='/adverts', method='POST enctype="multipart/form-data"')
             fieldset
               legend
                 span.number 1
@@ -36,13 +41,21 @@ block content
               #div2.drop-down-show-hide div 2
             input(type='submit', value='Make the Post')
             #offer.drop-down-show-hide
-              image-button.button-green
-                span.glyphicon.glyphicon-pencil
-                | Choose a file
+              input(type='file', name='avatar_field')
+
               p If you have a picture of the item, you can upload it.
               p If you have javascript enabled and a modern browser, choose any size image and it will be re-sized automatically before upload. Otherwise, maximum file size is 1.2MB.
 
             span.clearfix
+
+      if (locals.message)
+        .alert.alert-success(role='alert')
+          strong Welcome!
+          |  Please make a selection
+      if (locals.post)
+        .alert.alert-success(role='alert')
+          strong Thank you!
+          |  You have posted successfully
 
       #recentPost
         | recent Post
@@ -53,14 +66,7 @@ block content
       p help section
 
 
-    if (locals.message)
-      .alert.alert-success(role='alert')
-        strong Welcome!
-        |  Please make a selection
-    if (locals.post)
-      .alert.alert-success(role='alert')
-        strong Thank you!
-        |  You have posted successfully
+
 
 block scripts
   script(src='/javascripts/tabs.js')

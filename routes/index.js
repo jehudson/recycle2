@@ -5,6 +5,14 @@ var Advert = require('../models/adverts');
 var bCrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
 
+// import multer and the AvatarStorage engine
+var _ = require('lodash');
+var path = require('path');
+var multer = require('multer');
+var AvatarStorage = require('../helpers/AvatarStorage');
+
+
+
 
 
 var isAuthenticated = function (req, res, next) {
@@ -71,7 +79,7 @@ module.exports = function(passport){
 //		req.flash('success', 'Registration successfully');
 		res.locals.message = req.flash();
 
-		res.render('home', { user: req.user });
+		res.render('home', { user: req.user, avatar_field: process.env.AVATAR_FIELD });
 	});
 
 	/* Handle Logout */

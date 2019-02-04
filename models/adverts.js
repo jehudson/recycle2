@@ -7,5 +7,7 @@ module.exports = mongoose.model('posts',{
   email: String,
   messagetype: String,
   shortdescription: String,
-  longdescription: String
+  longdescription: String,
+  image: {data: Buffer, contentType: String}
+
 });

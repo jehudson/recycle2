@@ -1,18 +1,23 @@
 var Advert = require('../models/adverts');
 var bCrypt = require('bcrypt-nodejs');
 
-var newAdvert = new Advert();
+var newAdvert = new Advert(req.body);
+newAdvert.username =req.session.user;
 
-newAdvert.message-type =req.param('message-type');
-newAdvert.shortdescription =req.param('shortdescription');
-newAdvert.longdescription =req.param('longdescription');
 
-// save the Advert
-newAdvert.save(function(err) {
-    if (err){
-        console.log('Error in Saving Advert: '+err);
-        throw err;
-    }
-    console.log('Advert added succesfully');
-    return done(null, newAdvert);
-});
+
+console.log('monty', req.session.address);
+newAdvert.location = req.session.address;
+newAdvert.email = req.session.email;
+
+newAdvert.save()
+ .then(item =>{
+   req.flash('message', 'Your post has been made successfully');
+
+   res.redirect('/home');
+
+
+ })
+ .catch(err =>{
+   res.status(400).send("Unable to save to database");
+ });
