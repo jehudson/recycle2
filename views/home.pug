@@ -6,45 +6,33 @@ block content
   .container
     .tab
       button#defaultOpen.tablinks(onclick="openPosts(event, 'home')") Home
-      button.tablinks(onclick="openPosts(event, 'brwseitems')") Browse Items
+      button.tablinks(onclick="openPosts(event, 'browseitems')") Browse Items
       button.tablinks(onclick="openPosts(event, 'offeritem')") Offer an Item
       button.tablinks(onclick="openPosts(event, 'requestitem')") Request an Item
       button.tablinks(onclick="openPosts(event, 'myrecycle')") My Recycling
       button.tablinks(onclick="openPosts(event, 'mysettings')") My Settings
       button.tablinks(onclick="openPosts(event, 'announcements')") Announcements
 
-
-    #myposts.tabcontent
-      newpost-button.button-green
-        span.glyphicon.glyphicon-pencil
-        | Browse Items
-      recentpost-button.button-green
-        span.glyphicon.glyphicon-th-list
-        | Offer an Item
-      a.button-blue(href='/signout')
-        span.glyphicon.glyphicon-log-out
-        | Log Out
-      #newPost
-        .form-style-5
+    #offeritem.tabcontent
+      .form-style-5
           form(action='/adverts', method='POST enctype="multipart/form-data"')
             fieldset
               legend
                 span.number 1
-                |  Make a New Post
-              select#dropDown-message-type(name='messagetype')
-                option What type of post is this?
-                option(value='offer') It's an OFFER of an item
-                option(value='wanted') It's a request for a WANTED item
+                |  Offer an Item
               input(type='text', name='shortdescription', placeholder='Short description', required, autofocus)
-              textarea(name='longdescription', placeholder='You can add more details here', required)
-              #div1.drop-down-show-hide div 1
-              #div2.drop-down-show-hide div 2
-            input(type='submit', value='Make the Post')
-            #offer.drop-down-show-hide
-              input(type='file', name='avatar_field')
+              textarea(name='longdescription', placeholder='Please add more details here', required)
+              p You can add one or more pictures
 
-              p If you have a picture of the item, you can upload it.
-              p If you have javascript enabled and a modern browser, choose any size image and it will be re-sized automatically before upload. Otherwise, maximum file size is 1.2MB.
+            | Add a picture - we can accept jpg, png or gif up to 7mb in size
+          form(action='/images', method='POST enctype="multipart/form-data"')
+            fieldset
+              legend
+              input(type= 'file', name='image')
+              input(type= 'submit', value='Add this Picture')
+              p
+              input(type='submit', value='Make the Post')
+
 
             span.clearfix
 

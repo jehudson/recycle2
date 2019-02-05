@@ -3,12 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var multer = require('multer');
+const multer = require('multer');
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
 var upload = multer({ dest: './uploads/'})
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var dotenv = require('dotenv').config();
 var app = express();
+
+
 
 var dbConfig = require('./db.js');
 var mongoose = require('mongoose');
