@@ -4,57 +4,57 @@ extends layout
 block content
 
   .container
+    p
     .tab
       button#defaultOpen.tablinks(onclick="openPosts(event, 'home')") Home
       button.tablinks(onclick="openPosts(event, 'browseitems')") Browse Items
-      button.tablinks(onclick="openPosts(event, 'offeritem')") Offer an Item
-      button.tablinks(onclick="openPosts(event, 'requestitem')") Request an Item
-      button.tablinks(onclick="openPosts(event, 'myrecycle')") My Recycling
-      button.tablinks(onclick="openPosts(event, 'mysettings')") My Settings
-      button.tablinks(onclick="openPosts(event, 'announcements')") Announcements
+      button.tablinks(onclick="openPosts(event, 'myposts')") Post an Item
+      button.tablinks(onclick="openPosts(event, 'mysettings')") My Settings and Alerts
+      button.tablinks(onclick="location.href='/signout'") Logout
 
-    #offeritem.tabcontent
+    #home.tabcontent
+      include intro.pug
+    #myposts.tabcontent
       .form-style-5
-          form(action='/adverts', method='POST enctype="multipart/form-data"')
+        form(action='/adverts', method='POST')
             fieldset
               legend
                 span.number 1
-                |  Offer an Item
+                |  Make a New Post
+              select#dropDown-message-type(name='messagetype')
+                option What type of post is this?
+                option(value='offer') It's an OFFER of an item
+                option(value='wanted') It's a request for a WANTED item
               input(type='text', name='shortdescription', placeholder='Short description', required, autofocus)
-              textarea(name='longdescription', placeholder='Please add more details here', required)
-              p You can add one or more pictures
-
-            | Add a picture - we can accept jpg, png or gif up to 7mb in size
-          form(action='/images', method='POST enctype="multipart/form-data"')
-            fieldset
-              legend
-              input(type= 'file', name='image')
-              input(type= 'submit', value='Add this Picture')
-              p
-              input(type='submit', value='Make the Post')
+              textarea(name='longdescription', placeholder='You can add more details here', required)
+              #div1.drop-down-show-hide div 1
+              #div2.drop-down-show-hide div 2
+            input(type='submit', value='Make the Post')
+            #offer.drop-down-show-hide
+              image-button.button-green
+                span.glyphicon.glyphicon-pencil
+                | Choose a file
+              p Add a picture - we can accept jpg, png or gif up to 7MB in size.
 
 
             span.clearfix
 
-      if (locals.message)
-        .alert.alert-success(role='alert')
-          strong Welcome!
-          |  Please make a selection
-      if (locals.post)
-        .alert.alert-success(role='alert')
-          strong Thank you!
-          |  You have posted successfully
-
       #recentPost
         | recent Post
 
-    #mydetails.tabcontent
-      p my details
-    #recyclehelp.tabcontent
-      p help section
+    #mysettings.tabcontent
+      p Settings and Alerts
 
+    p
 
-
+    if (locals.message)
+      .alert.alert-success(role='alert')
+        strong Welcome!
+        |  Please make a selection
+    if (locals.post)
+      .alert.alert-success(role='alert')
+        strong Thank you!
+        |  You have posted successfully
 
 block scripts
   script(src='/javascripts/tabs.js')

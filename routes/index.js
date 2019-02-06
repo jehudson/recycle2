@@ -5,11 +5,7 @@ var Advert = require('../models/adverts');
 var bCrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
 
-// import multer and the AvatarStorage engine
-var _ = require('lodash');
-var path = require('path');
-var multer = require('multer');
-var AvatarStorage = require('../helpers/AvatarStorage');
+
 
 
 
@@ -40,6 +36,9 @@ module.exports = function(passport){
 		failureFlash : true
 	}));
 
+
+
+
 	router.post('/adverts', isAuthenticated, function(req, res){
 
    var newAdvert = new Advert(req.body);
@@ -60,6 +59,10 @@ module.exports = function(passport){
 	 	.catch(err =>{
 		 	res.status(400).send("Unable to save to database");
 	 	});
+	});
+
+	router.get('/adverts', function(req, res) {
+		res.render('home',{message: req.flash('message')});
 	});
 
 	/* GET Registration Page */
