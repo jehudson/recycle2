@@ -15,61 +15,13 @@ block content
     #home.tabcontent
       include intro.pug
     #browseitems.tabcontent
-      p
-      table#table.display(cellspacing='0', width='100%')
-        thead
-          tr
-            th Offer Type
-            th Description of Item
-            th Posted
-            th View
-      link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css')
-      link(rel='stylesheet', href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css')
-      script(type='text/javascript', src='https://code.jquery.com/jquery-3.3.1.min.js')
-      script(type='text/javascript', src='http://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js')
-      script(type='text/javascript', src='http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js')
-      script(type='text/javascript', src='http://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js')
-
-      script(type='text/javascript').
-        $.fn.dataTable.moment('D/M/YYYY');
-        $('#table').dataTable({
-        ajax: {
-        url: '/browse_items',
-        type: 'POST'
-        },
-        serverSide: true,
-        columns: [
-        {'data': 'messagetype'},
-        {'data': 'shortdescription'},
-        {'data': 'timestamp'},
-        {'defaultContent': '<button>View</button>'}
-        ]
-        });
+      include browse_items.pug
 
     #myposts.tabcontent
-      .form-style-5
-        form(action='/adverts', method='POST')
-            fieldset
-              legend
-                span.number 1
-                |  Make a New Post
-              select#dropDown-message-type(name='messagetype')
-                option What type of post is this?
-                option(value='offer') It's an OFFER of an item
-                option(value='wanted') It's a request for a WANTED item
-              input(type='text', name='shortdescription', placeholder='Short description', required, autofocus)
-              textarea(name='longdescription', placeholder='You can add more details here', required)
-              #div1.drop-down-show-hide div 1
-              #div2.drop-down-show-hide div 2
-            input(type='submit', value='Make the Post')
-            #offer.drop-down-show-hide
-              image-button.button-green
-                span.glyphicon.glyphicon-pencil
-                | Choose a file
-              p Add a picture - we can accept jpg, png or gif up to 7MB in size.
+      include new_post.pug
 
 
-            span.clearfix
+            
 
       #recentPost
         | recent Post
