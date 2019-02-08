@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var Advert = require('../models/adverts');
+var posts = require('../models/posts');
+
 var bCrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
 
@@ -36,12 +37,28 @@ module.exports = function(passport){
 		failureFlash : true
 	}));
 
+/* Browse Items */
+router.post('/browse_items', isAuthenticated, function(req, res) {
+  posts.dataTables({
+    limit: req.body.length,
+    skip: req.body.start,
+		order: req.body.order,
+    columns: req.body.columns
+  }).then(function (table) {
+    res.json({
+			data: table.data,
+			recordsFiltered: table.total,
+      recordsTotal: table.total
+		}); // table.total, table.data
+  });
+});
+
 
 
 
 	router.post('/adverts', isAuthenticated, function(req, res){
 
-   var newAdvert = new Advert(req.body);
+   var newAdvert = new posts(req.body);
 	 newAdvert.username =req.session.user;
 
 
@@ -49,6 +66,7 @@ module.exports = function(passport){
  console.log('monty', req.session.address);
  	newAdvert.location = req.session.address;
 	newAdvert.email = req.session.email;
+	newAdvert.timestamp = new Date;
 
    newAdvert.save()
 	 	.then(item =>{

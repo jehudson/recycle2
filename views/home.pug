@@ -14,6 +14,38 @@ block content
 
     #home.tabcontent
       include intro.pug
+    #browseitems.tabcontent
+      p
+      table#table.display(cellspacing='0', width='100%')
+        thead
+          tr
+            th Offer Type
+            th Description of Item
+            th Posted
+            th View
+      link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css')
+      link(rel='stylesheet', href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css')
+      script(type='text/javascript', src='https://code.jquery.com/jquery-3.3.1.min.js')
+      script(type='text/javascript', src='http://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js')
+      script(type='text/javascript', src='http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js')
+      script(type='text/javascript', src='http://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js')
+
+      script(type='text/javascript').
+        $.fn.dataTable.moment('D/M/YYYY');
+        $('#table').dataTable({
+        ajax: {
+        url: '/browse_items',
+        type: 'POST'
+        },
+        serverSide: true,
+        columns: [
+        {'data': 'messagetype'},
+        {'data': 'shortdescription'},
+        {'data': 'timestamp'},
+        {'defaultContent': '<button>View</button>'}
+        ]
+        });
+
     #myposts.tabcontent
       .form-style-5
         form(action='/adverts', method='POST')
