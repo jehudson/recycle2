@@ -3,6 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cloudinary = require('cloudinary');
+var multer = require('multer');
+require('dotenv').load();
+console.log('The value for CLOUDINARY_URL is :', process.env.CLOUDINARY_URL);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

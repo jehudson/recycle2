@@ -6,7 +6,16 @@ var posts = require('../models/posts');
 var bCrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
 
-
+const multer = require("multer");
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
+const storage = cloudinaryStorage({
+cloudinary: cloudinary,
+folder: "tlera",
+allowedFormats: ["jpg", "png", "gif"],
+transformation: [{ width: 600, height: 400, crop: "limit" }]
+});
+const parser = multer({ storage: storage });
 
 
 
@@ -56,22 +65,42 @@ router.post('/browse_items', isAuthenticated, function(req, res) {
 
 
 
-	router.post('/adverts', isAuthenticated, function(req, res){
+	router.post('/adverts', isAuthenticated, parser.single('image_file'), function(req, res){
 
-   var newAdvert = new posts(req.body);
-	 newAdvert.username =req.session.user;
+	console.log(req.file) // to see what is returned to you
+	const image_array = {};
 
 
 
- console.log('monty', req.session.address);
- 	newAdvert.location = req.session.address;
-	newAdvert.email = req.session.email;
-	newAdvert.timestamp = new Date;
 
-   newAdvert.save()
-	 	.then(item =>{
-			res.locals.post = req.flash();
-		 	res.render('home');
+  var newAdvert = new posts(req.body);
+	try {
+		newAdvert.image_url = req.file.url;
+	}
+	catch(error) {
+		newAdvert.image_url = "https://dummyimage.com/50/fafafa/fafafa";
+	}
+	try {
+			newAdvert.image_id = req.file.public_id;
+	}
+	catch(error) {
+		newAdvert.image_id = "";
+	}
+
+		newAdvert.username =req.session.user;
+	 	console.log('monty', req.session.address);
+	 	newAdvert.location = req.session.address;
+		newAdvert.email = req.session.email;
+		newAdvert.timestamp = new Date;
+
+
+
+
+
+  newAdvert.save()
+		.then(item =>{
+		res.locals.post = req.flash();
+	 	res.render('home');
 
 	 	})
 	 	.catch(err =>{

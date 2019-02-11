@@ -3,6 +3,7 @@ extends layout
 
 block content
 
+
   .container
     p
     .tab
@@ -21,7 +22,7 @@ block content
       include new_post.pug
 
 
-            
+
 
       #recentPost
         | recent Post
@@ -40,5 +41,10 @@ block content
         strong Thank you!
         |  You have posted successfully
 
+
+
 block scripts
   script(src='/javascripts/tabs.js')
+  script(src='/javascripts/image_resize.js')
+  script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js')
+  link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css')

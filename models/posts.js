@@ -12,7 +12,8 @@ var PostsSchema = new Schema ({
   messagetype: String,
   shortdescription: String,
   longdescription: String,
-  image: {data: Buffer, contentType: String}
+  image_url: String,
+  image_id: String
 });
 
 PostsSchema.plugin(dataTables);
