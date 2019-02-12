@@ -62,6 +62,22 @@ router.post('/browse_items', isAuthenticated, function(req, res) {
   });
 });
 
+/* my settings */
+router.get('/settings', isAuthenticated, function(req, res) {
+ res.render('settings', {
+        user: req.user
+    });
+
+});
+
+
+/* my settings */
+router.get('/edit_details', isAuthenticated, function(req, res) {
+ res.render('edit_details', {
+        user: req.user
+    });
+
+});
 
 
 

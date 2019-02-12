@@ -1,0 +1,57 @@
+.jumbotron
+  table#settings.display(cellspacing='0', width='100%')
+    thead
+      tr
+        th Full Name
+        th Username
+        th Mobile Number
+        th Email Address
+      tr
+        td #{user.fullname}
+        td #{user.username}
+        td #{user.mobile}
+        td #{user.email}
+
+
+
+  p
+  #edit-details
+    | This is where we edit the details
+  p
+  button#editdetails(onclick='toggleeditdetails') Edit Details
+  p
+
+  input.btn.btn-outline-primary(type='button',  name='edit-details', value='Edit Details')
+  |&nbsp;
+  |&nbsp;
+  a.btn.btn-outline-primary.btn-lg(href='#', role='button') Recent Posts
+  |&nbsp;
+  |&nbsp;
+  a.btn.btn-outline-primary.btn-lg(href='#', role='button') Change password
+  |&nbsp;
+  |&nbsp;
+  a.btn.btn-outline-primary.btn-lg(href='#', role='button') Leave Recycle
+
+block scripts
+  script.
+    function toggleeditdetails() {
+    // get the clock
+    var editdetails = document.getElementById('editdetails');
+      get the current value of the clock's display property
+    var displaySetting = editdetails.style.display;
+    // also get the clock button, so we can change what it says
+    var editdetails = document.getElementById('editdetails');
+    // now toggle the clock and the button text, depending on current state
+    if (displaySetting == 'block') {
+    // clock is visible. hide it
+    editdetails.style.display = 'none';
+    // change button text
+    editdetails.innerHTML = 'Show clock';
+    }
+    else {
+    // clock is hidden. show it
+    editdetails.style.display = 'block';
+    // change button text
+    editdetails.innerHTML = 'Hide clock';
+    }
+    }

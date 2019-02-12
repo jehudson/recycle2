@@ -20,15 +20,8 @@ block content
 
     #myposts.tabcontent
       include new_post.pug
-
-
-
-
-      #recentPost
-        | recent Post
-
     #mysettings.tabcontent
-      p Settings and Alerts
+      include settings.pug
 
     p
 
@@ -41,7 +34,7 @@ block content
         strong Thank you!
         |  You have posted successfully
 
-
+  
 
 block scripts
   script(src='/javascripts/tabs.js')
