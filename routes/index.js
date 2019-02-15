@@ -20,7 +20,6 @@ const parser = multer({ storage: storage });
 
 
 
-
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
 	// Passport adds this method to request object. A middleware is allowed to add properties to
@@ -64,18 +63,24 @@ router.post('/browse_items', isAuthenticated, function(req, res) {
 
 /* Recent Posts */
 router.post('/recent_posts', isAuthenticated, function(req, res) {
-  posts.dataTables({
-    limit: req.body.length,
-    skip: req.body.start,
-		order: req.body.order,
-    columns: req.body.columns
-  }).then(function (table) {
-    res.json({
+
+
+
+
+
+	posts.dataTables({
+	   limit: req.body.length,
+		 find: {username : req.session.user},
+	   skip: req.body.start,
+		 order: req.body.order,
+	   columns: req.body.columns
+	 }).then(function (table) {
+	   res.json({
 			data: table.data,
 			recordsFiltered: table.total,
-      recordsTotal: table.total
+	    recordsTotal: table.total
 		}); // table.total, table.data
-  });
+	});
 });
 
 /* my settings */

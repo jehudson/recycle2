@@ -27,12 +27,13 @@ script.
   }
   $(document).ready(function() {
     var dt = $('#browse_recent').DataTable({
-
+    
     ajax: {
     url: '/recent_posts',
     type: 'POST'
     },
     serverSide: true,
+
 
     columns: [
 
