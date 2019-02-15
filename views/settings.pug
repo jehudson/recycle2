@@ -6,52 +6,165 @@
         th Username
         th Mobile Number
         th Email Address
+        th Receive Alerts
       tr
         td #{user.fullname}
         td #{user.username}
         td #{user.mobile}
         td #{user.email}
+        td #{user.email_alerts}
 
 
 
   p
   #edit-details
-    | This is where we edit the details
-  p
-  button#editdetails(onclick='toggleeditdetails') Edit Details
-  p
+    .row
+      .span4
+        form(action='/ChangeDetails' method='POST')
+          .form-group
+            label(for='email') Email address (required)
+            input#email.form-control(type='email', name='email', aria-describedby='emailHelp', value=user.email, placeholder=user.email)
+            small#emailHelp.form-text.text-muted
+          .form-group
+            label(for='mobile') Mobile Number (optional)
+            input#mobile.form-control(type='text', name='mobile', value=user.mobile, placeholder=user.mobile)
+            small#mobileHelp.form-text.text-muted
+          .form-check
+            input#alerts.form-check-input(type='checkbox', name='email_alerts', checked=user.email_alerts)
+            label.form-check-label(for='alerts') Receive Email Alerts
+            small#alertsHelp.form-text.text-muted
+          br
+          button.btn.btn-primary(type='submit') Submit
+          br
+          p
+          | We'll never share your email with anyone else.
+          p
+          | Your number will only be shown to other people that you choose to reply to within the process of arranging a collection time. It is not visible on public offers or requests. You may provide a landline number instead if you wish.
+          p
+          | You can choose whether you want to receive email alerts and you will get instant emails whenever an offer or request is published.
+  br
 
-  input.btn.btn-outline-primary(type='button',  name='edit-details', value='Edit Details')
+
+  p
+  #recent-posts
+    include recent_posts.pug
+  p
+  #change-password
+    | This is where you will change your Password
+  p
+  #leave-recycle
+    | This is where you will leave recycle
+
+
+  input.btn.btn-outline-primary(type='button',  onclick='toggleDetails()', name='EditDetailsButton', value='Edit Details')
   |&nbsp;
   |&nbsp;
-  a.btn.btn-outline-primary.btn-lg(href='#', role='button') Recent Posts
+  input.btn.btn-outline-primary(type='button',  onclick='togglePosts()', name='RecentPostsButton', value='Recent Posts')
   |&nbsp;
   |&nbsp;
-  a.btn.btn-outline-primary.btn-lg(href='#', role='button') Change password
+  input.btn.btn-outline-primary(type='button',  onclick='togglePassword()', name='PasswordButton', value='Change Password')
   |&nbsp;
   |&nbsp;
-  a.btn.btn-outline-primary.btn-lg(href='#', role='button') Leave Recycle
+  input.btn.btn-outline-primary(type='button',  onclick='toggleLeave()', name='LeaveButton', value='Leave Recycle')
 
 block scripts
   script.
-    function toggleeditdetails() {
+    function toggleDetails() {
     // get the clock
-    var editdetails = document.getElementById('editdetails');
-      get the current value of the clock's display property
-    var displaySetting = editdetails.style.display;
+    var myEditDetails = document.getElementById('edit-details');
+
+    // get the current value of the clock's display property
+    var displaySetting = myEditDetails.style.display;
+
     // also get the clock button, so we can change what it says
-    var editdetails = document.getElementById('editdetails');
+    var EditDetailsButton = document.getElementById('EditDetailsButton');
+
     // now toggle the clock and the button text, depending on current state
     if (displaySetting == 'block') {
     // clock is visible. hide it
-    editdetails.style.display = 'none';
+    myEditDetails.style.display = 'none';
     // change button text
-    editdetails.innerHTML = 'Show clock';
+    EditDetailsButton.innerHTML = 'Edit Details';
     }
     else {
     // clock is hidden. show it
-    editdetails.style.display = 'block';
+    myEditDetails.style.display = 'block';
     // change button text
-    editdetails.innerHTML = 'Hide clock';
+    EditDetailsButton.innerHTML = 'Hide Edit Details';
+    }
+    }
+
+    function togglePosts() {
+    // get the clock
+    var myRecentPosts = document.getElementById('recent-posts');
+
+    // get the current value of the clock's display property
+    var displaySetting = myRecentPosts.style.display;
+
+    // also get the clock button, so we can change what it says
+    var RecentPostsButton = document.getElementById('RecentPostsButton');
+
+    // now toggle the clock and the button text, depending on current state
+    if (displaySetting == 'block') {
+    // clock is visible. hide it
+    myRecentPosts.style.display = 'none';
+    // change button text
+    RecentPostsButton.innerHTML = 'Recent Posts';
+    }
+    else {
+    // clock is hidden. show it
+    myRecentPosts.style.display = 'block';
+    // change button text
+    RecentPostsButton.innerHTML = 'Hide Recent Posts';
+    }
+    }
+
+    function togglePassword() {
+    // get the clock
+    var myChangePassword = document.getElementById('change-password');
+
+    // get the current value of the clock's display property
+    var displaySetting = myChangePassword.style.display;
+
+    // also get the clock button, so we can change what it says
+    var PasswordButton = document.getElementById('PasswordButton');
+
+    // now toggle the clock and the button text, depending on current state
+    if (displaySetting == 'block') {
+    // clock is visible. hide it
+    myChangePassword.style.display = 'none';
+    // change button text
+    PasswordButton.innerHTML = 'Change Password';
+    }
+    else {
+    // clock is hidden. show it
+    myChangePassword.style.display = 'block';
+    // change button text
+    PasswordButton.innerHTML = 'Hide Change Password';
+    }
+    }
+
+    function toggleLeave() {
+    // get the clock
+    var myLeaveRecycle = document.getElementById('leave-recycle');
+
+    // get the current value of the clock's display property
+    var displaySetting = myLeaveRecycle.style.display;
+
+    // also get the clock button, so we can change what it says
+    var LeaveButton = document.getElementById('LeaveButton');
+
+    // now toggle the clock and the button text, depending on current state
+    if (displaySetting == 'block') {
+    // clock is visible. hide it
+    myLeaveRecycle.style.display = 'none';
+    // change button text
+    LeaveButton.innerHTML = 'Leave Recycle';
+    }
+    else {
+    // clock is hidden. show it
+    myLeaveRecycle.style.display = 'block';
+    // change button text
+    LeaveButton.innerHTML = 'Hide Leave Recycle';
     }
     }

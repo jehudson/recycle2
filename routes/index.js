@@ -62,22 +62,32 @@ router.post('/browse_items', isAuthenticated, function(req, res) {
   });
 });
 
+/* Recent Posts */
+router.post('/recent_posts', isAuthenticated, function(req, res) {
+  posts.dataTables({
+    limit: req.body.length,
+    skip: req.body.start,
+		order: req.body.order,
+    columns: req.body.columns
+  }).then(function (table) {
+    res.json({
+			data: table.data,
+			recordsFiltered: table.total,
+      recordsTotal: table.total
+		}); // table.total, table.data
+  });
+});
+
 /* my settings */
 router.get('/settings', isAuthenticated, function(req, res) {
  res.render('settings', {
-        user: req.user
+
     });
 
 });
 
 
-/* my settings */
-router.get('/edit_details', isAuthenticated, function(req, res) {
- res.render('edit_details', {
-        user: req.user
-    });
 
-});
 
 
 
@@ -123,6 +133,33 @@ router.get('/edit_details', isAuthenticated, function(req, res) {
 		 	res.status(400).send("Unable to save to database");
 	 	});
 	});
+
+	router.post('/ChangeDetails', isAuthenticated, function(req, res) {
+		console.log(req.body);
+
+		User.findOneAndUpdate(
+			{username: req.session.user},{
+				$set: {
+				email: req.body.email,
+				mobile: req.body.mobile,
+				email_alerts: req.body.email_alerts
+			}
+			}, {
+				upsert: true
+			}, (err, result) => {
+	  		if (err) return res.send(err)
+				console.log(result)
+			});
+			res.render('index',{message: req.flash('message')});
+		});
+
+
+
+
+
+
+
+
 
 	router.get('/adverts', function(req, res) {
 		res.render('home',{message: req.flash('message')});

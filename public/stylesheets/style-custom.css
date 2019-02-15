@@ -142,3 +142,20 @@ tr.details td.details-control {
 #edit-details {
   display: none;
 }
+
+#recent-posts {
+  display: none;
+}
+
+#change-password {
+  display: none;
+}
+
+#leave-recycle {
+  display: none;
+}
+
+#tlera-copy {
+  text-align: center;
+  font-size: 15px;
+}
