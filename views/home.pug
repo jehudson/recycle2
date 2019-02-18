@@ -33,8 +33,16 @@ block content
       .alert.alert-success(role='alert')
         strong Thank you!
         |  You have posted successfully
+    if (locals.noaddress)
+      .alert.alert-warning(role='alert')
+        strong Alert!&nbsp;
+        | No account with that email address exists
 
-  
+
+    if sessionFlash && sessionFlash.message
+        div(class="alert alert-warning" role="alert")
+            p <strong>Alert!</strong> #{ sessionFlash.message }
+
 
 block scripts
   script(src='/javascripts/tabs.js')

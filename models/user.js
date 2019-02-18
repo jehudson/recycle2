@@ -8,5 +8,7 @@ module.exports = mongoose.model('User',{
   email: String,
   email_alerts: String,
   location: String,
-  mobile: String
+  mobile: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 });

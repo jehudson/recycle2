@@ -1,11 +1,27 @@
 var express = require('express');
 var router = express.Router();
+var async = require('async');
+var crypto = require('crypto');
+var nodemailer = require('nodemailer');
+var sgTransport = require('nodemailer-sendgrid-transport');
+
+var options = {
+  auth: {
+    api_user: process.env.SENDGRID_USER,
+    api_key: process.env.SENDGRID_PASSWORD
+  }
+}
+
+// Generates hash using bCrypt
+var createHash = function(password){
+		return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
 
 var posts = require('../models/posts');
 
 var bCrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
-
+var LocalStrategy   = require('passport-local').Strategy;
 const multer = require("multer");
 const cloudinary = require("cloudinary");
 const cloudinaryStorage = require("multer-storage-cloudinary");
@@ -83,15 +99,149 @@ router.post('/recent_posts', isAuthenticated, function(req, res) {
 	});
 });
 
+router.post('/ChangePassword', isAuthenticated, function(req, res) {
+	console.log(req.body);
+
+	User.findOneAndUpdate(
+		{username: req.session.user},{
+			$set: {
+			email: req.body.email,
+			mobile: req.body.mobile,
+			email_alerts: req.body.email_alerts
+		}
+		}, {
+			upsert: true
+		}, (err, result) => {
+			if (err) return res.send(err)
+			console.log(result)
+		});
+		res.render('index',{message: req.flash('message')});
+});
+
+router.get('/ForgotPassword', function(req, res) {
+
+  res.render('change_password', {
+    user: req.user
+  });
+
+});
+
+router.post('/ForgotPassword', function(req, res, next) {
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      User.findOne({ email: req.body.email }, function(err, user) {
+        if (!user)  {
+
+        req.session.sessionFlash = {
+          type: 'success',
+          message: 'No account with this email address exists'
+        }
+        return res.redirect(301, '/home');
+
+        }
+
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function(err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function(token, user, done) {
+      var smtpTransport = nodemailer.createTransport(sgTransport(options));
+
+      var mailOptions = {
+        to: user.email,
+        from: 'webmaster@tewkesburylodge.org.uk',
+        subject: 'TLERA Recycle Password Reset',
+        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+        done(err, 'done');
+      });
+    }
+  ], function(err) {
+    if (err) return next(err);
+    res.redirect('/home');
+  });
+});
+
+router.post('/reset/:token', function(req, res) {
+  async.waterfall([
+    function(done) {
+      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+        if (!user) {
+          req.flash('error', 'Password reset token is invalid or has expired.');
+          return res.redirect('back');
+        }
+
+        user.password = createHash(req.body.password);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        user.save(function(err) {
+          req.logIn(user, function(err) {
+            done(err, user);
+          });
+        });
+      });
+    },
+    function(user, done) {
+			var smtpTransport = nodemailer.createTransport(sgTransport(options));
+      var mailOptions = {
+        to: user.email,
+        from: 'webmaster@tewkesburylodge.org.uk',
+        subject: 'Your password has been changed',
+        text: 'Hello,\n\n' +
+          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        req.flash('success', 'Success! Your password has been changed.');
+        done(err);
+      });
+    }
+  ], function(err) {
+    res.redirect('/');
+  });
+});
+
+router.get('/reset/:token', function(req, res) {
+  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+    if (!user) {
+      req.flash('error', 'Password reset token is invalid or has expired.');
+      return res.redirect('/ForgotPassword');
+    }
+    res.render('reset', {
+      user: req.user
+    });
+  });
+});
+
 /* my settings */
 router.get('/settings', isAuthenticated, function(req, res) {
  res.render('settings', {
-
+	 			user: req.user
     });
 
 });
 
+/* my settings */
+router.get('/ForgotPassword', isAuthenticated, function(req, res) {
+ res.render('index', {
 
+    });
+});
 
 
 
@@ -185,9 +335,12 @@ router.get('/settings', isAuthenticated, function(req, res) {
 	/* GET Home Page */
 	router.get('/home', isAuthenticated, function(req, res){
 //		req.flash('success', 'Registration successfully');
-		res.locals.message = req.flash();
 
-		res.render('home', { user: req.user, avatar_field: process.env.AVATAR_FIELD });
+    req.flash('success', 'Registration successfully');
+
+    res.locals.message = req.flash();
+
+		res.render('home', { user: req.user });
 	});
 
 	/* Handle Logout */

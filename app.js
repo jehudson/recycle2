@@ -5,8 +5,16 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cloudinary = require('cloudinary');
 var multer = require('multer');
-require('dotenv').load();
+var nodemailer = require('nodemailer');
+var bcrypt = require('bcrypt-nodejs');
+var async = require('async');
+var crypto = require('crypto');
+var flash = require('express-flash');
+
+require('dotenv').config();
 console.log('The value for CLOUDINARY_URL is :', process.env.CLOUDINARY_URL);
+console.log('The value for SENDGRID_USER is :', process.env.SENDGRID_USER);
+console.log('The value for SENDGRID_PASSWORD is :', process.env.SENDGRID_PASSWORD);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -19,14 +27,19 @@ mongoose.connect(dbConfig.url);
 
 // Configuring Passport
 var passport = require('passport');
-var expressSession = require('express-session');
-app.use(expressSession({secret: 'MrWillyWarmer'}));
+var session = require('express-session');
+var sessionStore = new session.MemoryStore;
+app.use(session({
+    cookie: { maxAge: 60000 },
+    store: sessionStore,
+    saveUninitialized: true,
+    resave: 'true',
+    secret: 'secret'
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Using the flash middleware provided by connect-flash to store messages in session
-// and displaying in templates
-var flash = require('connect-flash');
+
 app.use(flash());
 
 // Initialize Passport
@@ -39,6 +52,29 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+// Custom flash middleware -- from Ethan Brown's book, 'Web Development with Node & Express'
+app.use(function(req, res, next){
+    // if there's a flash message in the session request, make it available in the response, then delete it
+    res.locals.sessionFlash = req.session.sessionFlash;
+    delete req.session.sessionFlash;
+    next();
+});
+
+
+
+
+
+// Route that incorporates flash messages from either req.flash(type) or res.locals.flash
+app.get('/', function( req, res ) {
+    res.render('index', { expressFlash: req.flash('success'), sessionFlash: res.locals.sessionFlash });
+});
+
+
+app.use(function(req, res, next){
+    res.locals.success_messages = req.flash('success_messages');
+    res.locals.error_messages = req.flash('error_messages');
+    next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,7 +83,7 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('MrWillyWarmer'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
