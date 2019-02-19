@@ -9,6 +9,7 @@ module.exports = mongoose.model('User',{
   email_alerts: String,
   location: String,
   mobile: String,
+  isVerified: { type: Boolean, default: false},
   resetPasswordToken: String,
   resetPasswordExpires: Date
 });

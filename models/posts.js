@@ -13,7 +13,8 @@ var PostsSchema = new Schema ({
   shortdescription: String,
   longdescription: String,
   image_url: String,
-  image_id: String
+  image_id: String,
+  expired: { type: Boolean, default: false}
 });
 
 PostsSchema.plugin(dataTables);

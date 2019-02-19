@@ -13,7 +13,11 @@ block content
 				input(type='submit', value='Log In')
 				span.clearfix
 					a.button-blue(href='/signup') Create an account
-					
+					p
+					| &nbsp;
+			if sessionFlash && sessionFlash.message
+				div(class="alert alert-warning" role="alert")
+					p <strong>Message: </strong> #{ sessionFlash.message }
 		#message
 			if message
 				h1.text-center.error-message #{message}

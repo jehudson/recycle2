@@ -33,7 +33,12 @@ transformation: [{ width: 600, height: 400, crop: "limit" }]
 });
 const parser = multer({ storage: storage });
 
-
+var reCAPTCHA = require('recaptcha2');
+var recaptcha = new reCAPTCHA({
+  siteKey: '6LeslBIUAAAAAAKXF-VyIn4DMP10J3d9T60efFWK',
+  secretKey: '6LeslBIUAAAAAOKZuSd_j2pj9ujD-YsEy8_GRNUO',
+  ssl: false
+});
 
 
 var isAuthenticated = function (req, res, next) {
@@ -78,7 +83,7 @@ router.post('/browse_items', isAuthenticated, function(req, res) {
 });
 
 /* Recent Posts */
-router.post('/recent_posts', isAuthenticated, function(req, res) {
+router.get('/recent_posts', isAuthenticated, function(req, res) {
 
 
 
@@ -167,7 +172,10 @@ router.post('/ForgotPassword', function(req, res, next) {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
-        req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+        req.session.sessionFlash = {
+          type: 'success',
+          message: 'An e-mail has been sent to ' + user.email + ' with further instructions.'
+        }
         done(err, 'done');
       });
     }
@@ -182,7 +190,11 @@ router.post('/reset/:token', function(req, res) {
     function(done) {
       User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
         if (!user) {
-          req.flash('error', 'Password reset token is invalid or has expired.');
+
+          req.session.sessionFlash = {
+            type: 'success',
+            message: 'Password reset token is invalid or has expired.'
+          }
           return res.redirect('back');
         }
 
@@ -207,7 +219,11 @@ router.post('/reset/:token', function(req, res) {
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
-        req.flash('success', 'Success! Your password has been changed.');
+
+        req.session.sessionFlash = {
+          type: 'success',
+          message: 'Success! Your password has been changed.'
+        }
         done(err);
       });
     }
@@ -238,9 +254,9 @@ router.get('/settings', isAuthenticated, function(req, res) {
 
 /* my settings */
 router.get('/ForgotPassword', isAuthenticated, function(req, res) {
- res.render('index', {
-
-    });
+  res.render('home', {
+        user: req.user
+     });
 });
 
 
@@ -282,7 +298,7 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 		.then(item =>{
 		res.locals.post = req.flash();
 	 	res.render('home');
-
+        user: req.user
 	 	})
 	 	.catch(err =>{
 		 	res.status(400).send("Unable to save to database");
@@ -305,7 +321,9 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 	  		if (err) return res.send(err)
 				console.log(result)
 			});
-			res.render('index',{message: req.flash('message')});
+      res.render('home', {
+     	 			user: req.user
+         });
 		});
 
 
@@ -322,7 +340,7 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 
 	/* GET Registration Page */
 	router.get('/signup', function(req, res) {
-		res.render('register',{message: req.flash('message')});
+		res.render('register',  {message: req.flash('message')});
 	});
 
 	/* Handle Registration POST */
@@ -349,6 +367,20 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 		res.redirect('/');
 	});
 
+  router.post('/leave-recycle', function(req, res) {
+    User.findOneAndDelete(
+      {username: req.session.user},
+      function(err, result) {
+        if (err) return res.send(err)
+        console.log(result)
+  // deleted at most one tank document
+
+      });
+
+
+    req.logout();
+    res.redirect('/');
+  })
 
 
 	return router;

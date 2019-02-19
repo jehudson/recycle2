@@ -28,7 +28,7 @@
     include forgot_password.pug
   p
   #leave-recycle
-    | This is where you will leave recycle
+    include leave-recycle.pug
 
 
   input.btn.btn-outline-primary(type='button',  onclick='toggleDetails()', name='EditDetailsButton', value='Edit Details')
@@ -49,10 +49,22 @@
     .alert.alert-warning(role='alert')
       strong Alert!
       | No account with that email address exists
-      
+
 block scripts
   script.
+
+
     function toggleDetails() {
+    // Close other buttons
+    var myRecentPosts = document.getElementById('recent-posts');
+    myRecentPosts.style.display = 'none';
+    var myChangePassword = document.getElementById('change-password');
+    myChangePassword.style.display = 'none';
+    var myForgotPassword = document.getElementById('forgot-password');
+    myForgotPassword.style.display = 'none';
+    var myLeaveRecycle = document.getElementById('leave-recycle');
+    myLeaveRecycle.style.display = 'none';
+
     // get the clock
     var myEditDetails = document.getElementById('edit-details');
 
@@ -72,12 +84,26 @@ block scripts
     else {
     // clock is hidden. show it
     myEditDetails.style.display = 'block';
+
     // change button text
     EditDetailsButton.innerHTML = 'Hide Edit Details';
     }
+
     }
 
     function togglePosts() {
+    // Close other buttons
+    var myEditDetails = document.getElementById('edit-details');
+    myEditDetails.style.display = 'none';
+    var myChangePassword = document.getElementById('change-password');
+    myChangePassword.style.display = 'none';
+    var myForgotPassword = document.getElementById('forgot-password');
+    myForgotPassword.style.display = 'none';
+    var myLeaveRecycle = document.getElementById('leave-recycle');
+    myLeaveRecycle.style.display = 'none';
+
+
+
     // get the clock
     var myRecentPosts = document.getElementById('recent-posts');
 
@@ -103,6 +129,16 @@ block scripts
     }
 
     function togglePassword() {
+    // Close other buttons
+    var myEditDetails = document.getElementById('edit-details');
+    myEditDetails.style.display = 'none';
+    var myRecentPosts = document.getElementById('recent-posts');
+    myRecentPosts.style.display = 'none';
+    var myForgotPassword = document.getElementById('forgot-password');
+    myForgotPassword.style.display = 'none';
+    var myLeaveRecycle = document.getElementById('leave-recycle');
+    myLeaveRecycle.style.display = 'none';
+
     // get the clock
     var myChangePassword = document.getElementById('change-password');
 
@@ -128,6 +164,17 @@ block scripts
     }
 
     function toggleForgotPassword() {
+    // Close other buttons
+    var myEditDetails = document.getElementById('edit-details');
+    myEditDetails.style.display = 'none';
+    var myRecentPosts = document.getElementById('recent-posts');
+    myRecentPosts.style.display = 'none';
+    var myChangePassword = document.getElementById('change-password');
+    myChangePassword.style.display = 'none'
+    var myLeaveRecycle = document.getElementById('leave-recycle');
+    myLeaveRecycle.style.display = 'none';
+
+
     // get the clock
     var myForgotPassword = document.getElementById('forgot-password');
 
@@ -153,6 +200,16 @@ block scripts
     }
 
     function toggleLeave() {
+    // Close other buttons
+    var myEditDetails = document.getElementById('edit-details');
+    myEditDetails.style.display = 'none';
+    var myRecentPosts = document.getElementById('recent-posts');
+    myRecentPosts.style.display = 'none';
+    var myChangePassword = document.getElementById('change-password');
+    myChangePassword.style.display = 'none'
+    var myForgotPassword = document.getElementById('forgot-password');
+    myForgotPassword.style.display = 'none';
+
     // get the clock
     var myLeaveRecycle = document.getElementById('leave-recycle');
 

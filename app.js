@@ -10,6 +10,8 @@ var bcrypt = require('bcrypt-nodejs');
 var async = require('async');
 var crypto = require('crypto');
 var flash = require('express-flash');
+var bodyParser = require('body-parser');
+
 
 require('dotenv').config();
 console.log('The value for CLOUDINARY_URL is :', process.env.CLOUDINARY_URL);
@@ -85,7 +87,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('MrWillyWarmer'));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 var routes = require('./routes/index')(passport);
 app.use('/', routes);
