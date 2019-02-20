@@ -83,7 +83,7 @@ router.post('/browse_items', isAuthenticated, function(req, res) {
 });
 
 /* Recent Posts */
-router.get('/recent_posts', isAuthenticated, function(req, res) {
+router.post('/recent_posts', isAuthenticated, function(req, res) {
 
 
 
@@ -130,6 +130,28 @@ router.get('/ForgotPassword', function(req, res) {
   });
 
 });
+
+router.get('/view_post/:id', function(req, res) {
+  posts.findOne({ _id : req.params.id}, function (err, posts) {
+
+    res.render('view_post', {
+      posts: posts
+    });
+  });
+
+});
+
+router.get('/edit_post/:id', function(req, res) {
+  posts.findOne({ _id : req.params.id}, function (err, posts) {
+
+    res.render('edit_post', {
+      posts: posts
+    });
+  });
+});
+
+
+
 
 router.post('/ForgotPassword', function(req, res, next) {
   async.waterfall([

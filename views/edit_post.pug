@@ -1,28 +1,38 @@
-.row
-  .span4
-    form(action='/EditPost' method='POST')
-      .form-group
-        label(for='email') Email address (required)
-        input#email.form-control(type='email', name='email', aria-describedby='emailHelp', value=user.email, placeholder=user.email)
-        small#emailHelp.form-text.text-muted
-      .form-group
-        label(for='mobile') Mobile Number (optional)
-        input#mobile.form-control(type='text', name='mobile', value=user.mobile, placeholder=user.mobile)
-        small#mobileHelp.form-text.text-muted
-      .form-check
-        input#alerts.form-check-input(type='checkbox', name='email_alerts', checked=user.email_alerts)
-        label.form-check-label(for='alerts') Receive Email Alerts
-        small#alertsHelp.form-text.text-muted
-      br
-      button.btn.btn-primary(type='submit') Submit
-      br
-      p
-      | We'll never share your email with anyone else.
-      p
-      | Your number will only be shown to other people that you choose to reply to within the process of arranging a collection time. It is not visible on public offers or requests. You may provide a landline number instead if you wish.
-      p
-      | You can choose whether you want to receive email alerts and you will get instant emails whenever an offer or request is published.
-br
+extends layout
+block content
+  .container
+    .row
+      .span6
+          form(action='/view_post' method='POST')
+            p
+            table#browse.display(cellspacing='0', width='100%')
+              thead
+                tr
+                  th Post Type
+                  th Title
+                  th Description of Item
+                  th Posted
+                tr
+                  td #{posts.messagetype}
+                  td #{posts.shortdescription}
+                  td #{posts.longdescription}
+                  td #{posts.timestamp}
+            br
+            img#post-image(src='' + posts.image_url)
+            p
+            button.btn.btn-warning(href='/edit_post', role='button') Edit Post
+            | &nbsp; &nbsp;
+            button.btn.btn-danger(type='expire_post') Remove Post
+            | &nbsp; &nbsp;
+            a.btn.btn-outline-primary(href='/home', role='button') Go Back
+            br
+            p
+            | Click Edit Post to change the description
+            p
+            | Click Remove Post to remove it from public view
+            p
+            | Click go back to where you came from
+  br
 
 
-p
+  p

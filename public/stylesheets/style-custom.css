@@ -163,3 +163,11 @@ tr.details td.details-control {
   text-align: center;
   font-size: 15px;
 }
+
+#post-image {
+  border-radius: 5%;
+}
+
+#change-description {
+  display: none;
+}

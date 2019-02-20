@@ -1,0 +1,58 @@
+extends layout
+block content
+  .container
+    .row
+      .span6
+
+        table#browse.display(class="table table-bordered")
+          thead(class="thead-light")
+            tr
+              th Post Type
+              th Title
+              th Description of Item
+              th Posted
+            tr
+              td #{posts.messagetype}
+              td #{posts.shortdescription}
+              td #{posts.longdescription}
+              td #{posts.timestamp}
+            br
+        p
+        | &nbsp;
+        img#post-image(src='' + posts.image_url)
+        | &nbsp;
+
+        p
+        #change-description
+          form(action='/view_post' method='POST')
+            fieldset
+              legend
+                |  Change Description
+                .form-group
+                  label(for='shortdescription') Short Description (required)
+                  input(type='text', class="form-control", name='shortdescription', value=posts.shortdescription, placeholder=posts.shortdescription)
+
+                .form-group
+                  label(for='longdescription') Long Description (required)
+                  textarea(class="form-control", name='longdescription', value=posts.longdescription, placeholder=posts.longdescription)
+                <button type="submit" class="btn btn-primary">Submit</button>
+        p
+        button.btn.btn-outline-primary(type='expire_post', onclick="myChangeDisplay()") Change post description
+        | &nbsp; &nbsp;
+        button.btn.btn-danger(type='expire_post') Remove Post
+        | &nbsp; &nbsp;
+        a.btn.btn-outline-primary(href='/home', role='button') Go Back
+        br
+        p
+        | Click Edit Post to change the short and long descriptions.
+        p
+        | Click Remove Post to remove it from public view
+        p
+        | Click Go Back to where you came from
+        br
+
+block scripts
+  script.
+    function myChangeDisplay() {
+    document.getElementById("change-description").style.display = "block";
+    }

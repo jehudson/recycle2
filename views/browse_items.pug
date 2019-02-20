@@ -24,8 +24,8 @@ script.
         'Location: '+d.location+'<br>'+
         'Date Posted: '+d.timestamp+'<br>'+
         'Post Type: '+d.messagetype+'<br>'+
-        '<img src="'+d.image_url+'"><br>'+
-        '<a href="/example">Respond to Post</a>';
+        '<img id="post-image" src="'+d.image_url+'"><br>'+
+        '<a href="/filtrum">Respond to Post</a>';
   }
   $(document).ready(function() {
     var dt = $('#browse').DataTable({
@@ -84,7 +84,7 @@ script.
         $.each( detailRows, function ( i, id ) {
             $('#'+id+' td.details-control').trigger( 'click' );
         } );
-    } );
+    });
 
   });
 
