@@ -1,0 +1,19 @@
+table#display_posts
+  thead
+    tr
+      th Post Type
+      th Description of Item
+      th Item Details
+      th location
+  for item in user_posts
+    tr
+      td #{item.messagetype}
+      td #{item.shortdescription}
+      td #{item.longdescription}
+      td #{item.location}
+
+block scripts
+  script.
+    $(document).ready(function() {
+      $('#display_posts').DataTable();
+    } );

@@ -9,8 +9,10 @@ var nodemailer = require('nodemailer');
 var bcrypt = require('bcrypt-nodejs');
 var async = require('async');
 var crypto = require('crypto');
-var flash = require('express-flash');
+var flash = require('connect-flash-plus');
 var bodyParser = require('body-parser');
+var moment = require('moment');
+
 
 
 require('dotenv').config();
@@ -22,7 +24,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-
+app.locals.moment = require('moment');
 var dbConfig = require('./db.js');
 var mongoose = require('mongoose');
 mongoose.connect(dbConfig.url);
@@ -56,9 +58,8 @@ passport.deserializeUser(function(id, done) {
 
 // Custom flash middleware -- from Ethan Brown's book, 'Web Development with Node & Express'
 app.use(function(req, res, next){
-    // if there's a flash message in the session request, make it available in the response, then delete it
-    res.locals.sessionFlash = req.session.sessionFlash;
-    delete req.session.sessionFlash;
+    res.locals.success = req.flash('success');
+    res.locals.errors = req.flash('error');
     next();
 });
 
@@ -66,17 +67,10 @@ app.use(function(req, res, next){
 
 
 
-// Route that incorporates flash messages from either req.flash(type) or res.locals.flash
-app.get('/', function( req, res ) {
-    res.render('index', { expressFlash: req.flash('success'), sessionFlash: res.locals.sessionFlash });
-});
 
 
-app.use(function(req, res, next){
-    res.locals.success_messages = req.flash('success_messages');
-    res.locals.error_messages = req.flash('error_messages');
-    next();
-});
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

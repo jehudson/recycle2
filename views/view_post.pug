@@ -15,7 +15,7 @@ block content
               td #{posts.messagetype}
               td #{posts.shortdescription}
               td #{posts.longdescription}
-              td #{posts.timestamp}
+              td #{moment(posts.timestamp).format('dddd, MMMM Do YYYY')}
             br
         p
         | &nbsp;
@@ -24,7 +24,7 @@ block content
 
         p
         #change-description
-          form(action='/view_post' method='POST')
+          form(action='/change_post' method='POST')
             fieldset
               legend
                 |  Change Description
@@ -39,7 +39,7 @@ block content
         p
         button.btn.btn-outline-primary(type='expire_post', onclick="myChangeDisplay()") Change post description
         | &nbsp; &nbsp;
-        button.btn.btn-danger(type='expire_post') Remove Post
+        a.btn.btn-danger(href='/expire_post/' + posts._id, role='button') Remove Post
         | &nbsp; &nbsp;
         a.btn.btn-outline-primary(href='/home', role='button') Go Back
         br

@@ -5,7 +5,7 @@ var Schema = mongoose.Schema
 
 var PostsSchema = new Schema ({
   id: String,
-  timestamp: String,
+  timestamp: Date,
   username: String,
   location: String,
   email: String,

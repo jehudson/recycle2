@@ -18,9 +18,13 @@
 
   p
   #edit-details
-    include edit_details.pug
+
+
+
   #recent-posts
-    include recent_posts.pug
+    include display_posts.pug
+
+
   p
   #change-password
     include change_password.pug
@@ -52,7 +56,9 @@
 
 block scripts
   script.
-
+    $(document).ready(function() {
+      $('#displayPosts').DataTable();
+    } );
 
     function toggleDetails() {
     // Close other buttons
@@ -233,3 +239,5 @@ block scripts
     LeaveButton.innerHTML = 'Hide Leave Recycle';
     }
     }
+
+span.clearfix

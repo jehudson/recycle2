@@ -15,9 +15,13 @@ block content
 					a.button-blue(href='/signup') Create an account
 					p
 					| &nbsp;
-			if sessionFlash && sessionFlash.message
-				div(class="alert alert-warning" role="alert")
-					p <strong>Message: </strong> #{ sessionFlash.message }
-		#message
-			if message
-				h1.text-center.error-message #{message}
+					if success && success.length > 0
+						.alert.alert-success(role="alert")
+							strong Success!
+							| #{success}
+					if error && error.length > 0
+						.alert.alert-danger(role="alert")
+							strong Alert!
+							| #{error}
+					if message && message.length > 0
+						.error.alert.alert-danger(role='alert') #{message}

@@ -12,8 +12,8 @@ block content
 					input(type='text', name='username', placeholder='Username *', required)
 					input(type='email', name='email', placeholder='Your Email *', required)
 					input(type='password', name='password', placeholder='Password', required)
-					select(name='location')
-						option(value='Please select your street/apartment') Please select your street/apartment
+					select(name='location', required)
+						option(value='' disabled='disabled' selected='selected') Please select your street/apartment?
 						option(value='Burwood Court') Burwood Court
 						option(value='Barr Beacon') Barr Beacon
 						option(value='Baxter House') Baxter House
@@ -39,8 +39,7 @@ block content
 				input(type='submit', value='Register')
 				p
 					a.button-blue(href='https://tewkesburylodge.org.uk/privacy-policy/' target='_blank') Privacy Policy
+				if message && message.length > 0
+					.error.alert.alert-danger(role='alert') #{message}
 
 				span.clearfix
-		#message
-			if message
-				h1.text-center.error-message #{message}

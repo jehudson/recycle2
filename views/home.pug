@@ -25,24 +25,14 @@ block content
 
     p
 
-    if (locals.message)
-      .alert.alert-success(role='alert')
-        strong Welcome!
-        |  Please make a selection
-    if (locals.post)
-      .alert.alert-success(role='alert')
-        strong Thank you!
-        |  You have posted successfully
-    if (locals.noaddress)
-      .alert.alert-warning(role='alert')
-        strong Alert!&nbsp;
-        | No account with that email address exists
-
-
-    if sessionFlash && sessionFlash.message
-        div(class="alert alert-warning" role="alert")
-            p <strong>Message: </strong> #{ sessionFlash.message }
-
+    if success && success.length > 0
+      .alert.alert-success(role="alert")
+        strong Success! 
+        | #{success}
+    if error && error.length > 0
+      .alert.alert-danger(role="alert")
+        strong Alert!
+        | #{error}
 
 block scripts
   script(src='/javascripts/tabs.js')

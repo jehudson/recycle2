@@ -16,7 +16,7 @@ block content
                   td #{posts.messagetype}
                   td #{posts.shortdescription}
                   td #{posts.longdescription}
-                  td #{posts.timestamp}
+                  td #{moment(posts.timestamp).format('dddd, MMMM Do YYYY')}
             br
             img#post-image(src='' + posts.image_url)
             p

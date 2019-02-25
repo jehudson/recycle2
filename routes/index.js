@@ -4,7 +4,7 @@ var async = require('async');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
-
+var moment = require('moment');
 var options = {
   auth: {
     api_user: process.env.SENDGRID_USER,
@@ -31,14 +31,14 @@ folder: "tlera",
 allowedFormats: ["jpg", "png", "gif"],
 transformation: [{ width: 600, height: 400, crop: "limit" }]
 });
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 const parser = multer({ storage: storage });
 
-var reCAPTCHA = require('recaptcha2');
-var recaptcha = new reCAPTCHA({
-  siteKey: '6LeslBIUAAAAAAKXF-VyIn4DMP10J3d9T60efFWK',
-  secretKey: '6LeslBIUAAAAAOKZuSd_j2pj9ujD-YsEy8_GRNUO',
-  ssl: false
-});
+
 
 
 var isAuthenticated = function (req, res, next) {
@@ -63,46 +63,48 @@ module.exports = function(passport){
 	router.post('/login', passport.authenticate('login', {
 		successRedirect: '/home',
 		failureRedirect: '/',
-		failureFlash : true
+    failureFlash: true
 	}));
 
-/* Browse Items */
-router.post('/browse_items', isAuthenticated, function(req, res) {
-  posts.dataTables({
-    limit: req.body.length,
-    skip: req.body.start,
-		order: req.body.order,
-    columns: req.body.columns
-  }).then(function (table) {
-    res.json({
-			data: table.data,
-			recordsFiltered: table.total,
-      recordsTotal: table.total
-		}); // table.total, table.data
+
+  /* Browse Items */
+  router.post('/browse_items', isAuthenticated, function(req, res) {
+    posts.dataTables({
+      limit: req.body.length,
+      find: {expired: false, username: req.session.user},
+      skip: req.body.start,
+  		order: req.body.order,
+      columns: req.body.columns
+    }).then(function (table) {
+      res.json({
+  			data: table.data,
+  			recordsFiltered: table.total,
+        recordsTotal: table.total
+  		}); // table.total, table.data
+    });
   });
-});
 
-/* Recent Posts */
-router.post('/recent_posts', isAuthenticated, function(req, res) {
+  /* Recent Posts */
+  router.post('/recent_posts', isAuthenticated, function(req, res) {
+
+  	posts.dataTables({
+  	   limit: req.body.length,
+       find: {expired : false},
+  		 find: ({username : req.session.user}),
+
+  	   skip: req.body.start,
+  		 order: req.body.order,
+  	   columns: req.body.columns
+  	 }).then(function (table) {
+  	   res.json({
+  			data: table.data,
+  			recordsFiltered: table.total,
+  	    recordsTotal: table.total
+  		}); // table.total, table.data
+  	});
+  });
 
 
-
-
-
-	posts.dataTables({
-	   limit: req.body.length,
-		 find: {username : req.session.user},
-	   skip: req.body.start,
-		 order: req.body.order,
-	   columns: req.body.columns
-	 }).then(function (table) {
-	   res.json({
-			data: table.data,
-			recordsFiltered: table.total,
-	    recordsTotal: table.total
-		}); // table.total, table.data
-	});
-});
 
 router.post('/ChangePassword', isAuthenticated, function(req, res) {
 	console.log(req.body);
@@ -136,10 +138,31 @@ router.get('/view_post/:id', function(req, res) {
 
     res.render('view_post', {
       posts: posts
+
+
     });
   });
 
 });
+
+router.get('/expire_post/:id', function(req, res) {
+  posts.findOneAndUpdate(
+    {_id: req.params.id},{
+      $set: {
+      expired: true,
+      }
+    }, {
+      upsert: true
+    }, (err, result) => {
+      if (err) return res.send(err)
+      console.log(result)
+    });
+
+    res.render( 'home', {
+        user: req.user
+
+       });
+})
 
 router.get('/edit_post/:id', function(req, res) {
   posts.findOne({ _id : req.params.id}, function (err, posts) {
@@ -268,9 +291,19 @@ router.get('/reset/:token', function(req, res) {
 
 /* my settings */
 router.get('/settings', isAuthenticated, function(req, res) {
- res.render('settings', {
-	 			user: req.user
+
+
+  posts.find({username: req.session.user, expired: false}, function(err, result) {
+    if (err) throw err;
+    console.log(result);
+
+
+    res.render('settings', {
+      user: req.user,
+      result: result,
+      title: "fishballs"
     });
+  });
 
 });
 
@@ -284,7 +317,7 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 
 
 
-	router.post('/adverts', isAuthenticated, parser.single('image_file'), function(req, res){
+	router.post('/new_post', isAuthenticated, parser.single('image_file'), function(req, res){
 
 	console.log(req.file) // to see what is returned to you
 	const image_array = {};
@@ -318,9 +351,10 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 
   newAdvert.save()
 		.then(item =>{
-		res.locals.post = req.flash();
-	 	res.render('home');
-        user: req.user
+
+    req.flash('success', "Your new post was successful")
+		res.redirect('../home');
+
 	 	})
 	 	.catch(err =>{
 		 	res.status(400).send("Unable to save to database");
@@ -343,9 +377,8 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 	  		if (err) return res.send(err)
 				console.log(result)
 			});
-      res.render('home', {
-     	 			user: req.user
-         });
+      req.flash('success', "You have changed your details")
+      res.redirect('../home');
 		});
 
 
@@ -356,9 +389,7 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 
 
 
-	router.get('/adverts', function(req, res) {
-		res.render('home',{message: req.flash('message')});
-	});
+
 
 	/* GET Registration Page */
 	router.get('/signup', function(req, res) {
@@ -375,13 +406,17 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 	/* GET Home Page */
 	router.get('/home', isAuthenticated, function(req, res){
 //		req.flash('success', 'Registration successfully');
+    posts.find({username: req.session.user, expired: false}, function(err, user_posts) {
+      if (err) throw err;
+      console.log(user_posts);
 
-    req.flash('success', 'Registration successfully');
 
-    res.locals.message = req.flash();
-
-		res.render('home', { user: req.user });
-	});
+      res.render('home', {
+        user: req.user,
+        user_posts: user_posts
+      });
+    });
+  });
 
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {

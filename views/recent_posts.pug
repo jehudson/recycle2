@@ -1,5 +1,5 @@
 p
-table#recent_posts.display(cellspacing='0', width='100%')
+table#browse_recent.display(cellspacing='0', width='100%')
   thead
     tr
       th Post Type
@@ -16,17 +16,17 @@ script(type='text/javascript', src='http://cdn.datatables.net/plug-ins/1.10.19/d
 
 script.
 
-  function format_recent ( d ) {
+  function format ( d ) {
     return 'Description of Item: '+d.shortdescription+'<br>'+
         'Notes about Item: '+d.longdescription+'<br>'+
         'Location: '+d.location+'<br>'+
         'Date Posted: '+d.timestamp+'<br>'+
         'Post Type: '+d.messagetype+'<br>'+
         '<img src="'+d.image_url+'"><br>'+
-        '<a href="/view_post/'+d._id+'">View/Change/Remove Post</a>';
+        '<a href="/example">Respond to Post</a>';
   }
   $(document).ready(function() {
-    var dt = $('#recent_posts').DataTable({
+    var dt = $('#browse_recent').DataTable({
 
     ajax: {
     url: '/recent_posts',
@@ -53,7 +53,7 @@ script.
 
     var detailRows = [];
 
-    $('#recent_posts tbody').on( 'click', 'tr td.details-control', function () {
+    $('#browse_recent tbody').on( 'click', 'tr td.details-control', function () {
           var tr = $(this).closest('tr');
           var row = dt.row( tr );
           var idx = $.inArray( tr.attr('id'), detailRows );
@@ -67,7 +67,7 @@ script.
           }
           else {
               tr.addClass( 'details' );
-              row.child( format_recent( row.data() ) ).show();
+              row.child( format( row.data() ) ).show();
 
               // Add to the 'open' array
               if ( idx === -1 ) {
