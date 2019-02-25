@@ -67,42 +67,9 @@ module.exports = function(passport){
 	}));
 
 
-  /* Browse Items */
-  router.post('/browse_items', isAuthenticated, function(req, res) {
-    posts.dataTables({
-      limit: req.body.length,
-      find: {expired: false, username: req.session.user},
-      skip: req.body.start,
-  		order: req.body.order,
-      columns: req.body.columns
-    }).then(function (table) {
-      res.json({
-  			data: table.data,
-  			recordsFiltered: table.total,
-        recordsTotal: table.total
-  		}); // table.total, table.data
-    });
-  });
 
-  /* Recent Posts */
-  router.post('/recent_posts', isAuthenticated, function(req, res) {
 
-  	posts.dataTables({
-  	   limit: req.body.length,
-       find: {expired : false},
-  		 find: ({username : req.session.user}),
 
-  	   skip: req.body.start,
-  		 order: req.body.order,
-  	   columns: req.body.columns
-  	 }).then(function (table) {
-  	   res.json({
-  			data: table.data,
-  			recordsFiltered: table.total,
-  	    recordsTotal: table.total
-  		}); // table.total, table.data
-  	});
-  });
 
 
 
@@ -133,6 +100,24 @@ router.get('/ForgotPassword', function(req, res) {
 
 });
 
+router.post('/change_post/:id', function(req, res) {
+  posts.findOneAndUpdate(
+    {_id: req.params.id},{
+
+      $set: {
+        shortdescription: req.body.shortdescription,
+        longdescription: req.body.longdescription
+      }
+    }, {
+      upsert: true
+    }, (err, result) => {
+      if (err) return res.send(err)
+      console.log(result)
+      req.flash('success', 'Your post has been updated');
+      return res.redirect( '/home');
+    });
+});
+
 router.get('/view_post/:id', function(req, res) {
   posts.findOne({ _id : req.params.id}, function (err, posts) {
 
@@ -156,13 +141,12 @@ router.get('/expire_post/:id', function(req, res) {
     }, (err, result) => {
       if (err) return res.send(err)
       console.log(result)
+        req.flash('success', 'Your post has been removed');
+      return res.redirect( '/home');
     });
 
-    res.render( 'home', {
-        user: req.user
 
-       });
-})
+});
 
 router.get('/edit_post/:id', function(req, res) {
   posts.findOne({ _id : req.params.id}, function (err, posts) {
@@ -192,7 +176,7 @@ router.post('/ForgotPassword', function(req, res, next) {
           type: 'success',
           message: 'No account with this email address exists'
         }
-        return res.redirect(301, '/home');
+        return res.redirect( '/home');
 
         }
 
@@ -289,23 +273,7 @@ router.get('/reset/:token', function(req, res) {
   });
 });
 
-/* my settings */
-router.get('/settings', isAuthenticated, function(req, res) {
 
-
-  posts.find({username: req.session.user, expired: false}, function(err, result) {
-    if (err) throw err;
-    console.log(result);
-
-
-    res.render('settings', {
-      user: req.user,
-      result: result,
-      title: "fishballs"
-    });
-  });
-
-});
 
 /* my settings */
 router.get('/ForgotPassword', isAuthenticated, function(req, res) {
@@ -407,15 +375,15 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 	router.get('/home', isAuthenticated, function(req, res){
 //		req.flash('success', 'Registration successfully');
     posts.find({username: req.session.user, expired: false}, function(err, user_posts) {
-      if (err) throw err;
-      console.log(user_posts);
-
-
-      res.render('home', {
-        user: req.user,
-        user_posts: user_posts
+      posts.find({expired: false}, function(err, all_posts){
+        res.render('home', {
+          user: req.user,
+          user_posts: user_posts,
+          all_posts: all_posts
+        });
       });
     });
+
   });
 
 	/* Handle Logout */

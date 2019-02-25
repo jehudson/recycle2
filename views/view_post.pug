@@ -24,7 +24,7 @@ block content
 
         p
         #change-description
-          form(action='/change_post' method='POST')
+          form(action='/change_post/' +posts._id method='POST')
             fieldset
               legend
                 |  Change Description

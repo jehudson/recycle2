@@ -1,11 +1,12 @@
 extends layout
 block content
   .container
+    p
     .row
       .span6
           form(action='/view_post' method='POST')
             p
-            table#browse.display(cellspacing='0', width='100%')
+            table#browse.display(class="table", cellspacing='0', width='100%')
               thead
                 tr
                   th Post Type
@@ -17,12 +18,13 @@ block content
                   td #{posts.shortdescription}
                   td #{posts.longdescription}
                   td #{moment(posts.timestamp).format('dddd, MMMM Do YYYY')}
+
             br
             img#post-image(src='' + posts.image_url)
             p
-            button.btn.btn-warning(href='/edit_post', role='button') Edit Post
+            a.btn.btn-warning(href='/view_post/' +posts._id, role='button') Edit Post
             | &nbsp; &nbsp;
-            button.btn.btn-danger(type='expire_post') Remove Post
+            a.btn.btn-danger(href='/expire_post/' +posts._id, role='button') Remove Post
             | &nbsp; &nbsp;
             a.btn.btn-outline-primary(href='/home', role='button') Go Back
             br

@@ -171,3 +171,7 @@ tr.details td.details-control {
 #change-description {
   display: none;
 }
+
+.table-cell-centre {
+  text-align: center;
+}
