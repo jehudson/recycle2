@@ -29,21 +29,24 @@ block content
             .form-group
               textarea#form-control(rows=7, cols="100", name='postenquiry', placeholder='Enter your enquiry')
             button.btn.btn-success(type='submit') Submit
+            | &nbsp;&nbsp;
+            a.btn.btn-outline-primary(href='/home', role='button') Go Back
         br
         |&nbsp;&nbsp;
 
 
       br
       | &nbsp;
-    button.btn.btn-primary(type='post-enquiry', onclick="myChangeDisplay()") Respond to Post
-    | &nbsp;&nbsp;
+    #post-buttons-first
+      button.btn.btn-primary(type='post-enquiry', onclick="myChangeDisplay()") Respond to Post
+      | &nbsp;&nbsp;
 
-    a.btn.btn-outline-primary(href='/home', role='button') Go Back
-    br
-    p
-    | Click Respond to Post to send an enquiry to the poster.
-    p
-    | Click go back to where you came from
+      a.btn.btn-outline-primary(href='/home', role='button') Go Back
+      br
+      p
+      | Click Respond to Post to send an enquiry to the poster.
+      p
+      | Click go back to where you came from
     br
 
 
@@ -53,4 +56,5 @@ block content
     script.
       function myChangeDisplay() {
       document.getElementById("post-enquiry").style.display = "block";
+      document.getElementById("post-buttons-first").style.display = "none";
       }

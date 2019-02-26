@@ -176,6 +176,10 @@ tr.details td.details-control {
   display: none;
 }
 
+#post-buttons-first {
+  display: block;
+}
+
 .table-cell-centre {
   text-align: center;
 }
