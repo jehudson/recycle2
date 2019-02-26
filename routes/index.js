@@ -157,6 +157,41 @@ router.get('/edit_post/:id', function(req, res) {
   });
 });
 
+router.get('/respond_post/:id', isAuthenticated, function(req, res) {
+  posts.findOne({ _id : req.params.id}, function (err, posts) {
+
+    res.render('respond_post', {
+      posts: posts
+    });
+  });
+});
+
+
+router.post('/post_enquiry/:id', isAuthenticated, function(req, res, done) {
+  posts.findOne({_id : req.params.id}, function (err, posts) {
+
+
+    var smtpTransport = nodemailer.createTransport(sgTransport(options));
+    var mailOptions = {
+      to: posts.email,
+      from: 'webmaster@tewkesburylodge.org.uk',
+      subject: req.body.subject,
+      text: req.body.postenquiry + '\n\n Please reply directly to ' + req.session.email
+    };
+    smtpTransport.sendMail(mailOptions, function(err) {
+
+
+    done(err, 'done');
+    })
+    req.flash('success', ' An email has been sent in response to your enquiry');
+    res.redirect('/home');
+
+
+
+  });
+
+
+});
 
 
 
@@ -221,7 +256,7 @@ router.post('/reset/:token', function(req, res) {
         if (!user) {
 
           req.session.sessionFlash = {
-            type: 'success',
+            type: 'error',
             message: 'Password reset token is invalid or has expired.'
           }
           return res.redirect('back');

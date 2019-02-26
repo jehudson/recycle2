@@ -172,6 +172,10 @@ tr.details td.details-control {
   display: none;
 }
 
+#post-enquiry {
+  display: none;
+}
+
 .table-cell-centre {
   text-align: center;
 }

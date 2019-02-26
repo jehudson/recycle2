@@ -1,4 +1,4 @@
-table#display_posts
+table#display_posts(cellspacing='0', width='100%')
   thead
     tr
       th Post Type
@@ -11,7 +11,7 @@ table#display_posts
       td #{post.shortdescription}
       td #{moment(post.timestamp).format('dddd, MMMM Do YYYY')}
       td.table-cell-centre
-        a(href='edit_post/' + post._id)
+        a(href='respond_post/' + post._id)
           img(src='/images/details_open.png', title='edit details', alt='edit details')
 
 block scripts

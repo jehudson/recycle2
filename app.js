@@ -33,6 +33,8 @@ mongoose.connect(dbConfig.url);
 var passport = require('passport');
 var session = require('express-session');
 var sessionStore = new session.MemoryStore;
+
+
 app.use(session({
     cookie: { maxAge: 60000 },
     store: sessionStore,
