@@ -27,7 +27,9 @@ var app = express();
 app.locals.moment = require('moment');
 var dbConfig = require('./db.js');
 var mongoose = require('mongoose');
-mongoose.connect(dbConfig.url);
+// mongoose.connect(dbConfig.url);
+mongoose.connect(process.env.MONGODB_URL)
+//var mongoose = require('process.env.MONGODB_URL')
 
 // Configuring Passport
 var passport = require('passport');
