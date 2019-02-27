@@ -202,7 +202,7 @@ router.get('/email_alerts/:id', isAuthenticated, function(req, res, done) {
           from: 'webmaster@tewkesburylodge.org.uk',
           subject: 'TLERA ReCycle Alert: ' + posts.messagetype,
           text: 'Posted: ' + posts.timestamp + '\n\n' + posts.shortdescription + '\n\n' + posts.longdescription + '\n\n' + posts.image_url,
-          html: "<p><strong>Posted: </strong>" + posts.timestamp + "</p><p><strong>Description: </strong>" + posts.shortdescription + "</p><p><strong>Details: </strong>"
+          html: "<p><strong>Posted: </strong>" + posts.timestamp + "</p><p><strong>Location: </strong>" + posts.location + "</p><p><strong>Description: </strong>" + posts.shortdescription + "</p><p><strong>Details: </strong>"
             + posts.longdescription +  "<p><img src=\"" + posts.image_url + "\" alt=\"post image\" ></p><p>If you do not want to receive any more post alerts, please log in at <a href=\"https://recycle.tewkesburylodge.org.uk\">TLERA ReCycle</a> and change your settings. <p>Regards<br/>TLERA Webmaster</p>"
         };
         info = smtpTransport.sendMail(mailOptions, function(err) {
