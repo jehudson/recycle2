@@ -192,22 +192,24 @@ router.post('/post_enquiry/:id', isAuthenticated, function(req, res, done) {
 });
 
 router.get('/email_alerts/:id', isAuthenticated, function(req, res, done) {
-  User.find({"email_alerts": "on"}, ).then(function(users) {
-    users.forEach(function(user) {
-      var smtpTransport = nodemailer.createTransport(sgTransport(options));
-      var mailOptions = {
-        to: user.email,
-        from: 'webmaster@tewkesburylodge.org.uk',
-        subject: 'bingbong'+ users.fullname,
-        text: 'This is an offer' + user.fullname
-      };
-      info = smtpTransport.sendMail(mailOptions, function(err) {
-        console.log("Message sent: ");
-        done(err, 'done');
-      })
+  posts.findOne({_id : req.params.id}, function (err, posts) {
+    User.find({"email_alerts": "on"}, ).then(function(users) {
+      users.forEach(function(user) {
+        var smtpTransport = nodemailer.createTransport(sgTransport(options));
+        var mailOptions = {
+          to: user.email,
+          from: 'webmaster@tewkesburylodge.org.uk',
+          subject: 'TLERA ReCycle Alert: ' + posts.messagetype,
+          text: 'Posted: ' + posts.timestamp + '\n\n' + posts.shortdescription + '\n\n' + posts.longdescription + '\n\n' + posts.image_url
+        };
+        info = smtpTransport.sendMail(mailOptions, function(err) {
+          console.log("Message sent: ");
+          done(err, 'done');
+        })
+      });
     });
-  });
   res.redirect('/home');
+});
 });
 
 
