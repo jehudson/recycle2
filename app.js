@@ -25,7 +25,7 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 app.locals.moment = require('moment');
-var dbConfig = require('./db.js');
+// var dbConfig = require('./db.js');
 var mongoose = require('mongoose');
 // mongoose.connect(dbConfig.url);
 mongoose.connect(process.env.MONGODB_URL)
