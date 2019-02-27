@@ -170,7 +170,7 @@ router.get('/respond_post/:id', isAuthenticated, function(req, res) {
 router.post('/post_enquiry/:id', isAuthenticated, function(req, res, done) {
   posts.findOne({_id : req.params.id}, function (err, posts) {
 
-
+    var post_id = req.params.id
     var smtpTransport = nodemailer.createTransport(sgTransport(options));
     var mailOptions = {
       to: posts.email,
@@ -179,18 +179,35 @@ router.post('/post_enquiry/:id', isAuthenticated, function(req, res, done) {
       text: req.body.postenquiry + '\n\n Please reply directly to ' + req.session.email
     };
     smtpTransport.sendMail(mailOptions, function(err) {
-
-
-    done(err, 'done');
+      done(err, 'done');
     })
     req.flash('success', ' An email has been sent in response to your enquiry');
-    res.redirect('/home');
+    res.redirect('/email_alerts/' + post_id);
 
 
 
   });
 
 
+});
+
+router.get('/email_alerts/:id', isAuthenticated, function(req, res, done) {
+  User.find({"email_alerts": "on"}, ).then(function(users) {
+    users.forEach(function(user) {
+      var smtpTransport = nodemailer.createTransport(sgTransport(options));
+      var mailOptions = {
+        to: user.email,
+        from: 'webmaster@tewkesburylodge.org.uk',
+        subject: 'bingbong'+ users.fullname,
+        text: 'This is an offer' + user.fullname
+      };
+      info = smtpTransport.sendMail(mailOptions, function(err) {
+        console.log("Message sent: ");
+        done(err, 'done');
+      })
+    });
+  });
+  res.redirect('/home');
 });
 
 
@@ -380,7 +397,7 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 	  		if (err) return res.send(err)
 				console.log(result)
 			});
-      req.flash('success', "You have changed your details")
+      req.flash('success', " You have changed your details")
       res.redirect('../home');
 		});
 
