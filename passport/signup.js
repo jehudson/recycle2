@@ -33,6 +33,7 @@ module.exports = function(passport){
                         newUser.email = req.param('email');
                         newUser.location = req.param('location');
 												newUser.mobile = req.param('mobile');
+												newUser.enail_alerts = "on";
 
                         // save the user
                         newUser.save(function(err) {
