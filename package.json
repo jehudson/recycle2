@@ -11,6 +11,7 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.13.2",
+    "cloudinary-jquery-file-upload": "^2.6.2",
     "concat": "^1.0.3",
     "concat-stream": "^1.6.2",
     "connect-flash": "^0.1.1",
