@@ -141,7 +141,7 @@ router.get('/expire_post/:id', function(req, res) {
     }, (err, result) => {
       if (err) return res.send(err)
       console.log(result)
-        req.flash('success', 'Your post has been removed');
+        req.flash('success', ' Your post has been removed');
       return res.redirect( '/home');
     });
 
