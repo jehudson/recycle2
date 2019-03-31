@@ -378,7 +378,7 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
   newAdvert.save()
 		.then(item =>{
 
-    req.flash('success', "Your new post was successful")
+    req.flash('success', " Your new post was successful")
 		res.redirect('../home');
 
 	 	})
