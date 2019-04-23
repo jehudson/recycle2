@@ -22,21 +22,7 @@ var posts = require('../models/posts');
 var bCrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
 var LocalStrategy   = require('passport-local').Strategy;
-const multer = require("multer");
-const cloudinary = require("cloudinary");
-const cloudinaryStorage = require("multer-storage-cloudinary");
-const storage = cloudinaryStorage({
-cloudinary: cloudinary,
-folder: "tlera",
-allowedFormats: ["jpg", "png", "gif"],
-transformation: [{ width: 600, height: 400, crop: "limit" }]
-});
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
-const parser = multer({ storage: storage });
+
 
 
 
@@ -343,7 +329,8 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 
 
 
-	router.post('/new_post', isAuthenticated, parser.single('image_file'), function(req, res){
+router.post('/new_post', isAuthenticated,  function(req, res){
+
 
 	console.log(req.file) // to see what is returned to you
 	const image_array = {};
@@ -370,6 +357,12 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 	 	newAdvert.location = req.session.address;
 		newAdvert.email = req.session.email;
 		newAdvert.timestamp = new Date;
+    newAdvert.shortdescription = req.body.shortdescription;
+    newAdvert.longdescription = req.body.longdescription;
+    newAdvert.image_url = req.body.image_url;
+
+
+
 
 
 
@@ -383,7 +376,7 @@ router.get('/ForgotPassword', isAuthenticated, function(req, res) {
 
 	 	})
 	 	.catch(err =>{
-		 	res.status(400).send("Unable to save to database");
+		 	res.status(503).send("Timeout problem");
 	 	});
 	});
 

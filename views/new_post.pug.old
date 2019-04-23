@@ -1,0 +1,28 @@
+script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js')
+link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css')
+
+
+
+.form-style-5
+  form(action='/new_post' method='POST' enctype="multipart/form-data")
+      fieldset
+        legend
+          span.number 1
+          |  Make a New Post
+        select#dropDown-message-type(name='messagetype')
+          option(value='' disabled='disabled' selected='selected') What type of post is this?
+          option(value='offer') It's an OFFER of an item
+          option(value='wanted') It's a request for a WANTED item
+        input(type='text', name='shortdescription', placeholder='Short description', required, autofocus)
+        textarea(name='longdescription', placeholder='You can add more details here', required)
+        #div1.drop-down-show-hide div 1
+        #div2.drop-down-show-hide div 2
+      input(type='submit', value='Make the Post')
+      #offer.drop-down-show-hide
+        p Add a picture - we can accept jpg, png or gif up to 7MB in size.
+        input#postimage(type='file', name='image_file', onchange='resizePhoto();')
+        br
+        p
+          output#filesInfo(style='visibility:hidden; display:block; margin-top:2em; margin-left:auto; margin-right:auto; border: red 2px solid;width: 200px;')
+          br
+          canvas#imagePreview(width='600', xheight='600')
