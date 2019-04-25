@@ -35,11 +35,21 @@ block content
 						option(value='Tewkesbury Avenue') Tewkesbury Avenue
 						option(value='The Hermitage') The Hermitage
 						option(value='Westwood Park') Westwood Park
-				
+				.g-recaptcha(data-sitekey='6LdDD6AUAAAAAH4FF4f5p1qDbHvnOiOKPxzlDSWk')
+				br
 				input(type='submit', value='Register')
 				p
 					a.button-blue(href='https://tewkesburylodge.org.uk/privacy-policy/' target='_blank') Privacy Policy
+				if success && success.length > 0
+					.alert.alert-success(role="alert")
+						strong Success!
+						| #{success}
+				if error && error.length > 0
+					.alert.alert-danger(role="alert")
+						strong Alert!
+						| #{error}
 				if message && message.length > 0
 					.error.alert.alert-danger(role='alert') #{message}
+
 
 				span.clearfix

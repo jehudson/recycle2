@@ -23,7 +23,7 @@
     "express": "~4.16.0",
     "express-flash": "0.0.2",
     "express-flash-messages": "^0.1.1",
-    "express-recaptcha": "^4.1.1",
+    "express-recaptcha": "^5.0.0",
     "express-session": "^1.15.6",
     "fs": "0.0.1-security",
     "http-errors": "~1.6.2",
@@ -44,7 +44,6 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "pug": "2.0.0-beta11",
-    "recaptcha": "^1.2.1",
     "streamifier": "^0.1.1"
   }
 }

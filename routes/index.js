@@ -24,7 +24,9 @@ var User = require('../models/user');
 var LocalStrategy   = require('passport-local').Strategy;
 
 
-
+var Recaptcha = require('express-recaptcha').RecaptchaV2;
+//import Recaptcha from 'express-recaptcha'
+var recaptcha = new Recaptcha('6LdDD6AUAAAAAH4FF4f5p1qDbHvnOiOKPxzlDSWk', '6LdDD6AUAAAAAEykpL8LoSEhjCb10jm-t9dX12Ij');
 
 
 var isAuthenticated = function (req, res, next) {
@@ -411,16 +413,29 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 
 
 	/* GET Registration Page */
-	router.get('/signup', function(req, res) {
-		res.render('register',  {message: req.flash('message')});
+	router.get('/signup', recaptcha.middleware.render, function(req, res) {
+		res.render('register',  {
+      message: req.flash('message'),
+      captcha : req.recaptcha
+    });
 	});
 
 	/* Handle Registration POST */
-	router.post('/signup', passport.authenticate('signup', {
+	router.post('/signup', recaptcha.middleware.verify, captchaVerification, passport.authenticate('signup', {
 		successRedirect: '/home',
 		failureRedirect: '/signup',
 		failureFlash : true
 	}));
+
+function captchaVerification(req, res, next) {
+  if (req.recaptcha.error) {
+
+      req.flash('message', " Please tick the reCAPTCHA box if you are human")
+      res.redirect('/signup');
+  } else {
+      return next();
+  }
+}
 
 	/* GET Home Page */
 	router.get('/home', isAuthenticated, function(req, res){
