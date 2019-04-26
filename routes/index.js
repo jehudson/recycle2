@@ -452,6 +452,21 @@ function captchaVerification(req, res, next) {
 
   });
 
+  /* GET Home Page */
+	router.get('/home-posts', isAuthenticated, function(req, res){
+//		req.flash('success', 'Registration successfully');
+    posts.find({username: req.session.user, expired: false}, function(err, user_posts) {
+      posts.find({expired: false}, function(err, all_posts){
+        res.render('home-posts', {
+          user: req.user,
+          user_posts: user_posts,
+          all_posts: all_posts
+        });
+      });
+    });
+
+  });
+
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {
 		req.logout();
