@@ -18,12 +18,13 @@ link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/
         textarea(name='longdescription', placeholder='You can add more details here', required)
         #div1.drop-down-show-hide div 1
         #div2.drop-down-show-hide div 2
-      input(type='hidden', name='image_url', id='image_url')
+        input(type='hidden', name='image_url', id='image_url')
       input(type='submit', value='Make the Post')
+      
 
       #offer.drop-down-show-hide
         p Add a picture - we can accept jpg, png or gif from several sources.
-        button#upload_widget.cloudinary-button Upload files
+        button#upload_widget.cloudinary-button(type='button') Upload files
         .feature-thumb
         script(src='https://widget.cloudinary.com/v2.0/global/all.js', type='text/javascript')
 
