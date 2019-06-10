@@ -39,7 +39,7 @@ var sessionStore = new session.MemoryStore;
 
 
 app.use(session({
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 3600000 },
     store: sessionStore,
     saveUninitialized: true,
     resave: 'true',
