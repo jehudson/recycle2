@@ -26,7 +26,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 
 var Recaptcha = require('express-recaptcha').RecaptchaV2;
 //import Recaptcha from 'express-recaptcha'
-var recaptcha = new Recaptcha('6LdFhZ8UAAAAALoy4AK7-82h7zuFRAbgp7pkhn6x', '6LdFhZ8UAAAAAC0_ZJFMk8Pe2FZPXRbHQGiCfuuT');
+var recaptcha = new Recaptcha('6Lcn1a8UAAAAAHci69EG8dE0NoqhCzBdRQkNVTmo', '6Lcn1a8UAAAAAMA7BwF32-ivOfdm7ncKE747aw51T');
 
 
 var isAuthenticated = function (req, res, next) {
