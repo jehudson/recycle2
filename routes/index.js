@@ -370,7 +370,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 
 
 
-  newAdvert.save(err,post)
+  newAdvert.save(function(post){
     var post_id = post._id
 		.then(item =>{
     
