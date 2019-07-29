@@ -1,5 +1,4 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var router = express.Router();
 var async = require('async');
 var crypto = require('crypto');
@@ -354,7 +353,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 	catch(error) {
 		newAdvert.image_id = "";
 	}
-    var newId = mongoose.Types.ObjectId();
+    
 		newAdvert.username =req.session.user;
 	 	console.log('monty', req.session.address);
 	 	newAdvert.location = req.session.address;
@@ -363,7 +362,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
     newAdvert.shortdescription = req.body.shortdescription;
     newAdvert.longdescription = req.body.longdescription;
     newAdvert.image_url = req.body.image_url;
-    newAdvert.__id = newId;
+    
     
 
 
@@ -376,7 +375,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 		.then(item =>{
     
     req.flash('success', " Your new post was successful")
-		res.redirect('/email_alerts/' + newId);
+		res.redirect('/email_alerts/' + _id);
 
 	 	})
 	 	.catch(err =>{
