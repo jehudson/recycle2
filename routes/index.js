@@ -170,7 +170,7 @@ router.post('/post_enquiry/:id', isAuthenticated, function(req, res, done) {
     smtpTransport.sendMail(mailOptions, function(err) {
       done(err, 'done');
     })
-
+    req.flash('success', ' An email has been sent in response to your enquiry');
     res.redirect('/home');
 
 
