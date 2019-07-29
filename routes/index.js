@@ -363,7 +363,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
     newAdvert.longdescription = req.body.longdescription;
     newAdvert.image_url = req.body.image_url;
 
-    var post_id = req.params.id
+    
 
 
 
@@ -372,7 +372,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 
   newAdvert.save()
 		.then(item =>{
-
+    var post_id = req.params.id
     req.flash('success', " Your new post was successful")
 		res.redirect('/email_alerts/' + post_id);
 
