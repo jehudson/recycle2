@@ -180,7 +180,7 @@ router.post('/post_enquiry/:id', isAuthenticated, function(req, res, done) {
 
 });
 
-router.post('/email_alerts/:id', isAuthenticated, function(req, res, done) {
+router.get('/email_alerts/:id', isAuthenticated, function(req, res, done) {
   posts.findOne({_id : req.params.id}, function (err, posts) {
     User.find({"email_alerts": "on"}, ).then(function(users) {
       users.forEach(function(user) {
@@ -199,7 +199,7 @@ router.post('/email_alerts/:id', isAuthenticated, function(req, res, done) {
         })
       });
     });
-  req.flash('success', ' An email has been sent in response to your enquiry');
+  req.flash('success', ' An email has been sent to subscribers with details of your offer.');
   res.redirect('/home');
 });
 });
@@ -374,7 +374,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 		.then(item =>{
 
     req.flash('success', " Your new post was successful")
-		res.redirect('../home');
+		res.redirect('/email_alerts/' + post_id);
 
 	 	})
 	 	.catch(err =>{
