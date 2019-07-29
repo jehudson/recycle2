@@ -339,7 +339,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 
 
 
-  var post_id = req.params.id
+  
   var newAdvert = new posts(req.body);
 	try {
 		newAdvert.image_url = req.file.url;
@@ -363,7 +363,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
     newAdvert.longdescription = req.body.longdescription;
     newAdvert.image_url = req.body.image_url;
 
-
+    var post_id = req.params.id
 
 
 
