@@ -372,7 +372,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 
   newAdvert.save()
 		.then(item =>{
-    var post_id = newAdvert.id
+    var post_id = newAdvert._id
     req.flash('success', " Your new post was successful")
 		res.redirect('/email_alerts/' + post_id);
 
