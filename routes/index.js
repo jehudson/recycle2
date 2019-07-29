@@ -199,7 +199,7 @@ router.get('/email_alerts/:id', isAuthenticated, function(req, res, done) {
         })
       });
     });
-  req.flash('success', ' An email has been sent to subscribers with details of your offer.');
+  
   res.redirect('/home');
 });
 });
@@ -372,7 +372,7 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 
   newAdvert.save()
 		.then(item =>{
-    var post_id = req.params.id
+    var post_id = newAdvert.id
     req.flash('success', " Your new post was successful")
 		res.redirect('/email_alerts/' + post_id);
 
