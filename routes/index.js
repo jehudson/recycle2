@@ -365,17 +365,22 @@ router.post('/new_post', isAuthenticated,  function(req, res){
     
     
 
+    newAdvert.save()
+		.then(item =>{
+
+    req.flash('success', " Your new post was successful")
+		res.redirect('/email_alerts/' + post_id);
+
+	 	})
+	 	.catch(err =>{
+		 	res.status(503).send("Timeout problem");
+	 	});
+	});
 
 
 
 
-
-     newAdvert.save(function(err,post){
-       var post_id = post.id
-       req.flash('success', " Your new post was successful");
-		   res.redirect('/email_alerts/' + post_id);
-     });
-  });
+     
     
 	
 
