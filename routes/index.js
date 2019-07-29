@@ -370,18 +370,13 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 
 
 
-  newAdvert.save()
-    
-		.then(item =>{
-    
+  newAdvert.save(function(err,post){
+    var post_id = post.id
     req.flash('success', " Your new post was successful")
-		res.redirect('/email_alerts/' + _id);
-
-	 	})
-	 	.catch(err =>{
-		 	res.status(503).send("Timeout problem");
-	 	});
-	});
+		res.redirect('/email_alerts/' + post_id);
+  });
+    
+	
 
 	router.post('/ChangeDetails', isAuthenticated, function(req, res) {
 		console.log(req.body);
