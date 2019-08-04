@@ -1,0 +1,60 @@
+extends layout
+block content
+  .container
+    p
+    .row
+      .span5
+
+        table#browse.display(class="table", cellspacing='0', width='100%')
+          thead
+            tr
+              th Post Type
+              th Title
+              th Description of Item
+              th Posted
+            tr
+              td #{posts.messagetype}
+              td #{posts.shortdescription}
+              td #{posts.longdescription}
+              td #{moment(posts.timestamp).format('dddd, MMMM Do YYYY')}
+              p
+        img#post-image(src='' + posts.image_url)
+        p
+        #post-enquiry
+          form(action='/post_enquiry/'+ posts._id, method='POST')
+            .form-group
+              label(for='subject') Subject
+              input#text.form-control(type='text', name='subject', value=posts.shortdescription + ' Enquiry', readonly)
+              small#textHelp.form-text.text-muted This is the item you are enquiring about
+            .form-group
+              textarea#form-control(rows=7, cols="100", name='postenquiry', placeholder='Enter your enquiry')
+            button.btn.btn-success(type='submit') Submit
+            | &nbsp;&nbsp;
+            a.btn.btn-outline-primary(href='/home', role='button') Go Back
+        br
+        |&nbsp;&nbsp;
+
+
+      br
+      | &nbsp;
+    #post-buttons-first
+      button.btn.btn-primary(type='post-enquiry', onclick="myChangeDisplay()") Respond to Post
+      | &nbsp;&nbsp;
+
+      
+      br
+      p
+      | Click Respond to Post to send an enquiry to the poster.
+      p
+      
+    br
+
+
+    p
+
+  block scripts
+    script.
+      function myChangeDisplay() {
+      document.getElementById("post-enquiry").style.display = "block";
+      document.getElementById("post-buttons-first").style.display = "none";
+      }

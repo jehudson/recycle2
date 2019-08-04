@@ -29,30 +29,39 @@ var Recaptcha = require('express-recaptcha').RecaptchaV2;
 var recaptcha = new Recaptcha('6Lcn1a8UAAAAAHci69EG8dE0NoqhCzBdRQkNVTmo', '6Lcn1a8UAAAAAMA7BwF32-ivOfdm7ncKE747aw51');
 
 
+
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
 	// Passport adds this method to request object. A middleware is allowed to add properties to
-	// request and response objects
+  // request and response objects
+  
 	if (req.isAuthenticated())
 		return next();
-	// if the user is not authenticated then redirect him to the login page
-	res.redirect('/');
+  // if the user is not authenticated then redirect him to the login page
+  req.session.returnTo = req.path;
+	res.redirect( `/` );
 }
+
+
+
+
+
 
 module.exports = function(passport){
 
 	/* GET login page. */
 	router.get('/', function(req, res) {
     	// Display the Login page with any flash message, if any
-		res.render('index', { message: req.flash('message') });
+      res.render('index', { message: req.flash('message') });
 	});
 
+	
 	/* Handle Login POST */
-	router.post('/login', passport.authenticate('login', {
-		successRedirect: '/home',
-		failureRedirect: '/',
-    failureFlash: true
-	}));
+	router.post('/login', passport.authenticate('login', {failureRedirect: '/',
+  failureFlash: true}), function(req, res) {
+    res.redirect(req.session.returnTo || '/home');
+		delete req.session.returnTo;
+	});
 
 
 
@@ -145,7 +154,7 @@ router.get('/edit_post/:id', function(req, res) {
   });
 });
 
-router.get('/respond_post/:id', isAuthenticated, function(req, res) {
+router.get('/respond_post/:id',  isAuthenticated, function(req, res) {
   posts.findOne({ _id : req.params.id}, function (err, posts) {
 
     res.render('respond_post', {
@@ -153,6 +162,19 @@ router.get('/respond_post/:id', isAuthenticated, function(req, res) {
     });
   });
 });
+
+router.get('/respond_post_email/:id',  isAuthenticated, function(req, res) {
+  posts.findOne({ _id : req.params.id}, function (err, posts) {
+
+    res.render('respond_post_email', {
+      posts: posts
+    });
+  });
+});
+
+
+
+
 
 
 router.post('/post_enquiry/:id', isAuthenticated, function(req, res, done) {
@@ -165,19 +187,21 @@ router.post('/post_enquiry/:id', isAuthenticated, function(req, res, done) {
       from: 'webmaster@tewkesburylodge.org.uk',
       subject: req.body.subject,
       text: req.body.postenquiry + '\n\n Please reply directly to ' + req.session.email,
-      html: req.body.postenquiry + " <p>Please reply directly to " + req.session.email + "</p><p>Regards<br/>TLERA Webmaster"
+      html: req.body.postenquiry + "<br><br> <p>Please reply directly to " + req.session.email + "</p><p>Regards<br/>TLERA Webmaster"
     };
     smtpTransport.sendMail(mailOptions, function(err) {
       done(err, 'done');
     })
+    
+    delete req.session.returnTo;
     req.flash('success', ' An email has been sent in response to your enquiry');
-    res.redirect('/home');
-
-
+    
+    return res.redirect('/home');
+    
 
   });
 
-
+  
 });
 
 router.get('/email_alerts/:id', isAuthenticated, function(req, res, done) {
@@ -191,7 +215,7 @@ router.get('/email_alerts/:id', isAuthenticated, function(req, res, done) {
           subject: 'TLERA ReCycle Alert: ' + posts.messagetype,
           text: 'Posted: ' + posts.timestamp + '\n\n' + posts.shortdescription + '\n\n' + posts.longdescription + '\n\n' + posts.image_url,
           html: "<p><strong>Posted: </strong>" + posts.timestamp + "</p><p><strong>Location: </strong>" + posts.location + "</p><p><strong>Description: </strong>" + posts.shortdescription + "</p><p><strong>Details: </strong>"
-            + posts.longdescription +  "<p><img src=\"" + posts.image_url + "\" alt=\"post image\" ></p><p>If you do not want to receive any more post alerts, please log in at <a href=\"http://recycle.tewkesburylodge.org.uk\">TLERA ReCycle</a> and change your settings. <p>Regards<br/>TLERA Webmaster</p>"
+            + posts.longdescription +  "<p><img src=\"" + posts.image_url + "\" alt=\"post image\" ></p><p><a  style=\"font-size: 50px;\" href=\"http://recycle.tewkesburylodge.org.uk/respond_post_email/" + posts._id + "\">Respond to post</a></p><p>If you do not want to receive any more post alerts, please log in at <a href=\"http://recycle.tewkesburylodge.org.uk\">TLERA ReCycle</a> and change your settings. <p>Regards<br/>TLERA Webmaster</p>"
         };
         info = smtpTransport.sendMail(mailOptions, function(err) {
           console.log("Message sent: ");
@@ -199,9 +223,9 @@ router.get('/email_alerts/:id', isAuthenticated, function(req, res, done) {
         })
       });
     });
-  
-  res.redirect('/home');
-});
+    req.flash('success', ' An email alert has been sent to subscribers');
+    res.redirect('/home');
+  });
 });
 
 
@@ -363,18 +387,19 @@ router.post('/new_post', isAuthenticated,  function(req, res){
     newAdvert.longdescription = req.body.longdescription;
     newAdvert.image_url = req.body.image_url;
     
+    newAdvert.save(function (error, newAdvert) {
+
+      post_id = newAdvert._id
+
+      if (error) {
+          // Return Error Message
+      } else {
+           req.flash('success', " Your new post was successful")
+	         res.redirect('/email_alerts/' + post_id);
+      }
+    });
+
     
-
-    newAdvert.save()
-		.then(item =>{
-
-    req.flash('success', " Your new post was successful")
-		res.redirect('/email_alerts/' + post_id);
-
-	 	})
-	 	.catch(err =>{
-		 	res.status(503).send("Timeout problem");
-	 	});
 	});
 
 
