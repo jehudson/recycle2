@@ -450,9 +450,9 @@ router.post('/new_post', isAuthenticated,  function(req, res){
 	/* Handle Registration POST */
 	router.post('/signup', recaptcha.middleware.verify, captchaVerification, passport.authenticate('signup', {
     successRedirect: '/home',
-    successFash: 'Registration successful, welcome to Recycle on the Hill',
+    successFlash: 'Registration successful, welcome to Recycle on the Hill',
 		failureRedirect: '/signup',
-		failureFlash : true
+    failureFlash : true
 	}));
 
 function captchaVerification(req, res, next) {
