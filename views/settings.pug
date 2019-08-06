@@ -98,8 +98,6 @@ block scripts
     myEditDetails.style.display = 'none';
     var myChangePassword = document.getElementById('change-password');
     myChangePassword.style.display = 'none';
-    var myForgotPassword = document.getElementById('forgot-password');
-    myForgotPassword.style.display = 'none';
     var myLeaveRecycle = document.getElementById('leave-recycle');
     myLeaveRecycle.style.display = 'none';
 
@@ -135,8 +133,7 @@ block scripts
     myEditDetails.style.display = 'none';
     var myRecentPosts = document.getElementById('recent-posts');
     myRecentPosts.style.display = 'none';
-    var myForgotPassword = document.getElementById('forgot-password');
-    myForgotPassword.style.display = 'none';
+    
     var myLeaveRecycle = document.getElementById('leave-recycle');
     myLeaveRecycle.style.display = 'none';
 
@@ -164,41 +161,7 @@ block scripts
     }
     }
 
-    function toggleForgotPassword() {
-    // Close other buttons
-    var myEditDetails = document.getElementById('edit-details');
-    myEditDetails.style.display = 'none';
-    var myRecentPosts = document.getElementById('recent-posts');
-    myRecentPosts.style.display = 'none';
-    var myChangePassword = document.getElementById('change-password');
-    myChangePassword.style.display = 'none'
-    var myLeaveRecycle = document.getElementById('leave-recycle');
-    myLeaveRecycle.style.display = 'none';
-
-
-    // get the clock
-    var myForgotPassword = document.getElementById('forgot-password');
-
-    // get the current value of the clock's display property
-    var displaySetting = myForgotPassword.style.display;
-
-    // also get the clock button, so we can change what it says
-    var PasswordButton = document.getElementById('ForgotPasswordButton');
-
-    // now toggle the clock and the button text, depending on current state
-    if (displaySetting == 'block') {
-    // clock is visible. hide it
-    myForgotPassword.style.display = 'none';
-    // change button text
-    ForgotPasswordButton.innerHTML = 'Forgot Password';
-    }
-    else {
-    // clock is hidden. show it
-    myForgotPassword.style.display = 'block';
-    // change button text
-    ForogtPasswordButton.innerHTML = 'Hide Forgot Password';
-    }
-    }
+    
 
     function toggleLeave() {
     // Close other buttons
@@ -208,8 +171,7 @@ block scripts
     myRecentPosts.style.display = 'none';
     var myChangePassword = document.getElementById('change-password');
     myChangePassword.style.display = 'none'
-    var myForgotPassword = document.getElementById('forgot-password');
-    myForgotPassword.style.display = 'none';
+    
 
     // get the clock
     var myLeaveRecycle = document.getElementById('leave-recycle');
