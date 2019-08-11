@@ -37,6 +37,34 @@ $('#dropDown-message-type').change(function () {
 
 });
 
+$('#update-password-btn').click(function () {
+    $.ajax({
+      url: '/reset_password',
+      type: 'POST',
+      cache: false,
+      data: {
+        password: $('#password').val(),
+        confirm: $('#confirm').val()
+      },
+      success: function () {
+        $('#error-group').css('display', 'none');
+        location.replace("/")
+      },
+      error: function (data) {
+        $('#error-group').css('display', 'block');
+        var errors = JSON.parse(data.responseText);
+        var errorsContainer = $('#errors');
+        errorsContainer.innerHTML = '';
+        var errorsList = '';
+  
+        for (var i = 0; i < errors.length; i++) {
+          errorsList += '<li>' + errors[i].msg + '</li>';
+        }
+        errorsContainer.html(errorsList);
+      }
+    });
+  });
+
 function resizePhoto() {
     var output = document.getElementById('filesInfo');
     output.style.visibility = "visible";

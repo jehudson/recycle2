@@ -25,6 +25,7 @@
     "express-flash-messages": "^0.1.1",
     "express-recaptcha": "^5.0.0",
     "express-session": "^1.15.6",
+    "express-validator": "^6.1.1",
     "fs": "0.0.1-security",
     "http-errors": "~1.6.2",
     "imagemagick": "^0.1.3",

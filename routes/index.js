@@ -172,6 +172,50 @@ router.get('/respond_post_email/:id',  isAuthenticated, function(req, res) {
   });
 });
 
+const {check, validationResult} = require('express-validator');
+
+router.post('/reset_password', isAuthenticated, [
+  check('password', 'Password must have at least eight characters').not().isEmpty().isLength({min: 5}),
+  check('confirm', 'Passwords do not match').custom((value, {req}) => (value === req.body.password))
+],  (req, res, done) => {
+  const errors = validationResult(req);
+  
+
+  if (!errors.isEmpty()) {
+    return res.status(422).jsonp(errors.array());
+  
+  } else {
+   
+    User.findOne({username: req.session.user}, function(err, user) {
+      if (!user) {
+
+        req.session.sessionFlash = {
+          type: 'error',
+          message: 'Something has gone wrong'
+        }
+        return res.redirect('back');
+      }
+      user.password = createHash(req.body.password);
+      
+      user.save(function (err) {
+        if(err) {
+          req.flash('error', 'Your password could not be changed, please try again')
+        }
+      });
+      req.flash('success', ' Your password has been changed');
+      res.send({});
+
+    });
+  
+    
+    
+    
+  
+  }
+
+    
+  
+});
 
 
 
