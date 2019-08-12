@@ -552,6 +552,10 @@ function captchaVerification(req, res, next) {
 	});
 
   router.post('/leave-recycle', function(req, res) {
+    posts.deleteMany({username: req.session.user, expired: false}, function (err, result) {
+      if (err ) return res.send(err)
+      console.log(result)
+    })
     User.findOneAndDelete(
       {username: req.session.user},
       function(err, result) {
