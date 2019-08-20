@@ -26,8 +26,8 @@ var LocalStrategy   = require('passport-local').Strategy;
 
 var Recaptcha = require('express-recaptcha').RecaptchaV2;
 //import Recaptcha from 'express-recaptcha'
-//var recaptcha = new Recaptcha('6Lcn1a8UAAAAAHci69EG8dE0NoqhCzBdRQkNVTmo', '6Lcn1a8UAAAAAMA7BwF32-ivOfdm7ncKE747aw51');
-var recaptcha = new Recaptcha('6LdDD6AUAAAAAH4FF4f5p1qDbHvnOiOKPxzlDSWk', '6LdDD6AUAAAAAEykpL8LoSEhjCb10jm-t9dX12Ij');
+var recaptcha = new Recaptcha('6Lcn1a8UAAAAAHci69EG8dE0NoqhCzBdRQkNVTmo', '6Lcn1a8UAAAAAMA7BwF32-ivOfdm7ncKE747aw51');
+//var recaptcha = new Recaptcha('6LdDD6AUAAAAAH4FF4f5p1qDbHvnOiOKPxzlDSWk', '6LdDD6AUAAAAAEykpL8LoSEhjCb10jm-t9dX12Ij');
 
 
 
