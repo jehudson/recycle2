@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -25,6 +26,7 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 app.use(express.urlencoded());
+
 app.locals.moment = require('moment');
 // var dbConfig = require('./db.js');
 var mongoose = require('mongoose');
@@ -89,6 +91,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(cookieParser());
 var routes = require('./routes/index')(passport);
 app.use('/', routes);
 

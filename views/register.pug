@@ -2,17 +2,20 @@ extends layout
 
 block content
 	.container
+		
+		
 		.form-style-5
 			form(action='/signup', method='POST')
 				fieldset
 					legend
 						span.number 1
 						|  Please fill in this form  to register
-					input(type='text', name='fullname', placeholder='Your Name *', required)
-					input(type='text', name='username', placeholder='Username *', required)
-					input(type='email', name='email', placeholder='Your Email *', required)
-					input(type='password', name='password', placeholder='Password', required)
-					select(name='location', required)
+					input(type='text', name='fullname', id='fullname', placeholder='Your Name *', required)
+					input(type='text', name='username', id='username', placeholder='Username *', required)
+					input(type='email', name='email', id='email', placeholder='Your Email *', required)
+					input(type='password', name='password', id='password', placeholder='Password', required)
+					input(type='password', name='confirm', id='conmfirm', placeholder='Confirm Password', required)
+					select(name='location', id='location' required)
 						option(value='' disabled='disabled' selected='selected') Please select your street/apartment?
 						option(value='Burwood Court') Burwood Court
 						option(value='Barr Beacon') Barr Beacon
@@ -35,7 +38,7 @@ block content
 						option(value='Tewkesbury Avenue') Tewkesbury Avenue
 						option(value='The Hermitage') The Hermitage
 						option(value='Westwood Park') Westwood Park
-				.g-recaptcha(data-sitekey='6Lcn1a8UAAAAAHci69EG8dE0NoqhCzBdRQkNVTmo')
+				.g-recaptcha(data-sitekey='6LdDD6AUAAAAAH4FF4f5p1qDbHvnOiOKPxzlDSWk')
 				br
 				input(type='submit', value='Register')
 				p
@@ -50,6 +53,13 @@ block content
 						| #{error}
 				if message && message.length > 0
 					.error.alert.alert-danger(role='alert') #{message}
-
+				ul
+					if errors
+						each error, i in errors
+							.error.alert.alert-danger(role='alert') #{error.msg}
+				
+				
 
 				span.clearfix
+block scripts
+	script(src='/javascripts/validation.js')

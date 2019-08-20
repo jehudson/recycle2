@@ -26,7 +26,8 @@ var LocalStrategy   = require('passport-local').Strategy;
 
 var Recaptcha = require('express-recaptcha').RecaptchaV2;
 //import Recaptcha from 'express-recaptcha'
-var recaptcha = new Recaptcha('6Lcn1a8UAAAAAHci69EG8dE0NoqhCzBdRQkNVTmo', '6Lcn1a8UAAAAAMA7BwF32-ivOfdm7ncKE747aw51');
+//var recaptcha = new Recaptcha('6Lcn1a8UAAAAAHci69EG8dE0NoqhCzBdRQkNVTmo', '6Lcn1a8UAAAAAMA7BwF32-ivOfdm7ncKE747aw51');
+var recaptcha = new Recaptcha('6LdDD6AUAAAAAH4FF4f5p1qDbHvnOiOKPxzlDSWk', '6LdDD6AUAAAAAEykpL8LoSEhjCb10jm-t9dX12Ij');
 
 
 
@@ -489,15 +490,42 @@ router.post('/new_post', isAuthenticated,  function(req, res){
       message: req.flash('message'),
       captcha : req.recaptcha
     });
-	});
+  });
+  
+ 
+  /* Handle Registration POST */
+  
+  router.post("/signup", recaptcha.middleware.verify, captchaVerification,
+  [
+    check('password', 'Password must have at least eight characters').not().isEmpty().isLength({min: 8}),
+    check('confirm', 'Passwords do not match').custom((value, {req}) => (value === req.body.password)),
 
-	/* Handle Registration POST */
-	router.post('/signup', recaptcha.middleware.verify, captchaVerification, passport.authenticate('signup', {
-    successRedirect: '/home',
-    successFlash: ' Registration successful.  Welcome to Recycle on the Hill.',
-		failureRedirect: '/signup',
-    failureFlash : true
-	}));
+  ], 
+  (req, res, next) => {
+    // Check validation.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      
+      
+      res.render('register', {
+        errors: errors.array()
+      });
+     
+      
+    }
+    // if validation is successful, call next() to go on with passport authentication.
+    next();
+  },
+  passport.authenticate("signup", {
+    successRedirect: "/home",
+    failureRedirect: "/signup",
+    failureFlash: true,
+    successFlash: ' Registration successful, welcome to Recycle on the Hill'
+  })
+);
+
+
+  
 
 function captchaVerification(req, res, next) {
   if (req.recaptcha.error) {
