@@ -1,8 +1,13 @@
 extends layout
 
 block content
+
+
+
 	.container
 		
+
+      
 		
 		.form-style-5
 			form(action='/signup', method='POST')
@@ -13,8 +18,8 @@ block content
 					input(type='text', name='fullname', id='fullname', placeholder='Your Name *', required)
 					input(type='text', name='username', id='username', placeholder='Username *', required)
 					input(type='email', name='email', id='email', placeholder='Your Email *', required)
-					input(type='password', name='password', id='password', placeholder='Password', required)
-					input(type='password', name='confirm', id='conmfirm', placeholder='Confirm Password', required)
+					input(type='password', id='password', name='password', pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}', title='Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters', required='')
+					input(type='password', name='confirm', id='confirm', placeholder='Confirm Password', required)
 					select(name='location', id='location' required)
 						option(value='' disabled='disabled' selected='selected') Please select your street/apartment?
 						option(value='Burwood Court') Burwood Court
@@ -43,6 +48,28 @@ block content
 				input(type='submit', value='Register')
 				p
 					a.button-blue(href='https://tewkesburylodge.org.uk/privacy-policy/' target='_blank') Privacy Policy
+				#message
+					h5 Password must contain the following:
+						|   
+						p#letter.invalid
+							| A 
+							b lowercase
+							|  letter
+					|   
+					p#capital.invalid
+						| A 
+						b capital (uppercase)
+						|  letter
+					|
+					p#number.invalid
+						| A 
+						b number
+					|   
+					p#length.invalid
+						| Minimum 
+						b 8 characters
+
+				
 				if success && success.length > 0
 					.alert.alert-success(role="alert")
 						strong Success!
