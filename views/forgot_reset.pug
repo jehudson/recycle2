@@ -7,7 +7,7 @@ block content
     .alert(class="alert-danger", role="alert", id="error-group", style="display: none")
           ul(id="errors")
     .form-style-5
-          form(action='/reset_password', method='POST')
+          form(method='POST')
             legend Reset Password
             .form-group
               label(for='password') New Password
@@ -16,4 +16,5 @@ block content
               label(for='confirm') Confirm Password
               input.form-control(type='password', id='confirm', value='')
             .form-group
-            button.form-control(type="button", class="btn btn-primary", id="update-password-btn") Update Password
+              button.btn.btn-primary(type='submit') Update Password
+            

@@ -34,16 +34,16 @@
     include leave-recycle.pug
 
 
-  input.btn.btn-outline-primary(type='button',  onclick='toggleDetails()', name='EditDetailsButton', value='Edit Details')
+  input.btn-settings.btn-outline-primary(type='button',  onclick='toggleDetails()', name='EditDetailsButton', value='Edit Details')
   |&nbsp;
   |&nbsp;
-  input.btn.btn-outline-primary(type='button',  onclick='togglePosts()', name='RecentPostsButton', value='Recent Posts')
+  input.btn-settings.btn-outline-primary(type='button',  onclick='togglePosts()', name='RecentPostsButton', value='Recent Posts')
   |&nbsp;
   |&nbsp;
-  input.btn.btn-outline-primary(type='button',  onclick='togglePassword()', name='PasswordButton', value='Change Password')
+  input.btn-settings.btn-outline-primary(type='button',  onclick='togglePassword()', name='PasswordButton', value='Change Password')
   |&nbsp;
   |&nbsp;
-  input.btn.btn-outline-primary(type='button',  onclick='toggleLeave()', name='LeaveButton', value='Leave Recycle')
+  input.btn-settings.btn-outline-primary(type='button',  onclick='toggleLeave()', name='LeaveButton', value='Leave Recycle')
 
   if (locals.noaddress)
     .alert.alert-warning(role='alert')

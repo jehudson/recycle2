@@ -312,7 +312,7 @@ router.post('/ForgotPassword', function(req, res, next) {
         subject: 'TLERA Recycle Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'http://' + req.headers.host + '/forgot_reset/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
@@ -329,7 +329,7 @@ router.post('/ForgotPassword', function(req, res, next) {
   });
 });
 
-router.post('/reset/:token', function(req, res) {
+router.post('/forgot_reset/:token', function(req, res) {
   async.waterfall([
     function(done) {
       User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
@@ -376,13 +376,13 @@ router.post('/reset/:token', function(req, res) {
   });
 });
 
-router.get('/reset/:token', function(req, res) {
+router.get('/forgot_reset/:token', function(req, res) {
   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
     if (!user) {
       req.flash('error', 'Password reset token is invalid or has expired.');
       return res.redirect('/ForgotPassword');
     }
-    res.render('reset', {
+    res.render('forgot_reset', {
       user: req.user
     });
   });
