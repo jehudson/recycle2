@@ -297,7 +297,7 @@ router.post('/ForgotPassword', function(req, res, next) {
 
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-
+        
         user.save(function(err) {
           done(err, token, user);
         });
@@ -329,9 +329,12 @@ router.post('/ForgotPassword', function(req, res, next) {
   });
 });
 
-router.post('/forgot_reset/:token', function(req, res) {
+router.post('/forgot_reset/:token', 
+
+function(req, res) {
   async.waterfall([
     function(done) {
+      
       User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
         if (!user) {
 
@@ -342,16 +345,21 @@ router.post('/forgot_reset/:token', function(req, res) {
           return res.redirect('back');
         }
 
+
+
         user.password = createHash(req.body.password);
+        console.log('password plain', req.body.password);
+        console.log('password hash', user.password);
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
-
+        req.flash('success', ' Your password has been changed');
         user.save(function(err) {
           req.logIn(user, function(err) {
             done(err, user);
           });
         });
       });
+    
     },
     function(user, done) {
 			var smtpTransport = nodemailer.createTransport(sgTransport(options));
@@ -374,13 +382,14 @@ router.post('/forgot_reset/:token', function(req, res) {
   ], function(err) {
     res.redirect('/');
   });
+
 });
 
 router.get('/forgot_reset/:token', function(req, res) {
   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
     if (!user) {
       req.flash('error', 'Password reset token is invalid or has expired.');
-      return res.redirect('/ForgotPassword');
+      return res.redirect('/forgot_password');
     }
     res.render('forgot_reset', {
       user: req.user

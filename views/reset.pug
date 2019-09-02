@@ -1,19 +1,14 @@
-extends layout
-
-block content
-
-  .container
-
-    .alert(class="alert-danger", role="alert", id="error-group", style="display: none")
-          ul(id="errors")
-    .form-style-5
+.alert(class="alert-danger", role="alert", id="error-group", style="display: none")
+  ul(id="errors")
+.form-style-5
           form(action='/reset_password', method='POST')
             legend Reset Password
             .form-group
               label(for='password') New Password
-              input.form-control(type='password', id='password', value='', autofocus='true')
+              input.form-control(type='password', id='password', name='password', value='', autofocus='true')
             .form-group
               label(for='confirm') Confirm Password
-              input.form-control(type='password', id='confirm', value='')
+              input.form-control(type='password', id='confirm', name='confirm', value='')
             .form-group
             button.form-control(type="button", class="btn btn-primary", id="update-password-btn") Update Password
+
