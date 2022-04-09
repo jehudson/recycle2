@@ -32,7 +32,7 @@
     "jimp": "^0.4.0",
     "lodash": "^4.17.15",
     "mkdirp": "^0.5.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongo-datatable": "^1.1.1",
     "mongoose": "^5.2.12",
     "mongoose-datatables": "^3.2.0",
